@@ -5,6 +5,7 @@
   "useSqliteDb": true,
   "useMongoDb": false,
   "newspapers": [
+    "eldiario.es",
     "latimes",
     "newyorktimes",
     "usatoday",
@@ -16,6 +17,12 @@
     "thesunuk"
   ],
   "scrapingSettings": {
+    "eldiario.es": {
+      "maxPages": 1,
+      "startingUrls": [
+        "https://www.eldiario.es/"
+      ]
+    },
     "latimes": {
       "maxPages": 1,
       "startingUrls": [

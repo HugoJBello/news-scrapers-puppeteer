@@ -12,6 +12,10 @@ import {GlobalConfigI} from "./models/GlobalConfig";
 import {NewYorkTimesContentScraper} from "./scrapers/NewYorkTimesContentScraper";
 import {NewYorkTimesIndexScraper} from "./scrapers/NewYorkTimesIndexScraper";
 import { initDb } from './models/sequelizeConfig';
+import { GuardianNewContentScraper } from './scrapers/GuardianNewContentScraper';
+import { GuardianNewIndexScraper } from './scrapers/GuardianNewIndexScraper';
+import { ElDiarioesIndexScraper } from './scrapers/ElDiarioesIndexScraper';
+import { ElDiarioesContentScraper } from './scrapers/ElDiarioesContentScraper';
 
 require('dotenv').config();
 
@@ -40,7 +44,26 @@ export default class ScraperApp {
 
         for (let newspaper of newspapersReordered) {
             console.log("loading index for " + newspaper)
+            
+            if (newspaper === "eldiario.es") {
+                const indexScraper = await this.prepareIndex(newspaper)
+                console.log(indexScraper)
+                const scraper = {
+                    pageScraper: new ElDiarioesContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new ElDiarioesIndexScraper(indexScraper)
+                } as ScraperTuple
+                this.scrapers.push(scraper)
+            }
 
+            if (newspaper === "guardianus") {
+                const indexScraper = await this.prepareIndex(newspaper)
+                console.log(indexScraper)
+                const scraper = {
+                    pageScraper: new GuardianNewContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new GuardianNewIndexScraper(indexScraper)
+                } as ScraperTuple
+                this.scrapers.push(scraper)
+            }
 
             if (newspaper === "newyorktimes") {
                 const indexScraper = await this.prepareIndex(newspaper)
