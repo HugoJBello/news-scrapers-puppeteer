@@ -2,6 +2,7 @@
 
 export interface ScrapingConfigI{
     scraperId: string;
+    apiUrl: string;
     appId: string;
     deviceId:string;
     newspapers:string[];

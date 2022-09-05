@@ -29,7 +29,7 @@ export class PuppeteerScraper {
         console.log("initializing puppeteer");
 
         this.browser = await puppeteer.launch({
-            headless: false,
+            headless: true,
             ignoreHTTPSErrors: true,
             slowMo: 0,
             args: ['--window-size=1400,900',
