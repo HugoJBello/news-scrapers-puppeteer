@@ -77,6 +77,8 @@ export default class ScraperApp {
 
         }
 
+        
+
     }
     async prepareGlobalConfig() {
         let globalConfig = await this.persistenceManager.findCurrentGlogalConfig()
@@ -110,7 +112,7 @@ export default class ScraperApp {
     async prepareIndex(newspaper: string): Promise<ScrapingIndexI> {
         let indexScraper = await this.persistenceManager.findCurrentIndex(newspaper)
         if (!indexScraper || !indexScraper.scraperId) {
-            console.log(indexScraper)
+            console.log("not found indes", indexScraper)
             indexScraper = this.loadIndexFromConfig(newspaper)
         }
 
