@@ -28,12 +28,15 @@ export default class PersistenceManager {
     }
 
     async updateIndex(index: ScrapingIndexI) {
-        const indexDb = Object.create(index)
+        index.scraperId = this.config.scraperId
+
+        const indexDb = {...index}
         const conditions = {
             scraperId: indexDb.scraperId,
             newspaper: indexDb.newspaper
         }
         indexDb.dateScraping = new Date()
+
 
         await this.apiManager.saveScrapingIndex(index)
 

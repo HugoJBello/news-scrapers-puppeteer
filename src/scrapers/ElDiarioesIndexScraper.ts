@@ -9,6 +9,7 @@ export class ElDiarioesIndexScraper extends IndexScraper {
     public scrapingIndex: ScrapingIndexI
     public urls:string[] = []
     public urlPrefixes:string[] = []
+    public mustStartWith = "https://www.eldiario.es/"
 
     constructor(scrapingIndex: ScrapingIndexI) {
         super();
@@ -28,6 +29,13 @@ export class ElDiarioesIndexScraper extends IndexScraper {
         const extractedUrls = await this.extractUrlsFromStartingUrl(currentUrl)
         const uniqUrls = [...new Set(extractedUrls)];
         return uniqUrls
+    }
+
+    checkCorrectUrl(url:string) {
+        if (url.startsWith(this.mustStartWith)){            
+            return true
+        }
+        return false
     }
 
     async extractUrlsFromStartingUrl(url: string): Promise<string[]> {
@@ -81,12 +89,13 @@ export class ElDiarioesIndexScraper extends IndexScraper {
     }
 
     async extractUrlsFromPage(): Promise<string[]>{
+
         let hrefs = await this.page.$$eval('a', (as:any) => as.map((a:any) => a.href));
         const date_regex = /[0-9]{7}.html$/
         //_9282003.html
 
         return hrefs.filter((href: string) => {
-            return date_regex.test(href)
+            return date_regex.test(href) && this.checkCorrectUrl(href)
         })
     }
 

@@ -85,6 +85,8 @@ export default class ScraperApp {
         if (globalConfig) {
             this.globalConfig = globalConfig
         } else {
+            console.log("global config nof found, starting new one");
+            
             globalConfig = {} as GlobalConfigI
             globalConfig.scraperId = this.config.scraperId
             globalConfig.deviceId = this.config.deviceId
@@ -112,7 +114,7 @@ export default class ScraperApp {
     async prepareIndex(newspaper: string): Promise<ScrapingIndexI> {
         let indexScraper = await this.persistenceManager.findCurrentIndex(newspaper)
         if (!indexScraper || !indexScraper.scraperId) {
-            console.log("not found indes", indexScraper)
+            console.log("not found index", indexScraper)
             indexScraper = this.loadIndexFromConfig(newspaper)
         }
 
@@ -133,7 +135,7 @@ export default class ScraperApp {
         indexScraper.newspaper = newspaper
         indexScraper.scraperId = this.config.scraperId
         indexScraper.deviceId = this.config.deviceId
-        indexScraper.maxPages = this.config.scrapingSettings[newspaper].maxPages
+        indexScraper.maxPages = this.config.scrapingSettings[newspaper].maxPages        
         return indexScraper
     }
 

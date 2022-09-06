@@ -11,6 +11,7 @@ export class ElDiarioesContentScraper extends ContentScraper {
     public newspaper: string
     public scraperId: string
     public excludedParagraphs: string[] = [' ', '  ', ' \n', '  \n']
+    public mustStartWith = "https://www.eldiario.es/"
 
     constructor(scraperId: string, newspaper: string) {
         super();
@@ -20,12 +21,26 @@ export class ElDiarioesContentScraper extends ContentScraper {
         this.timeWaitClick = 500
     }
 
+    checkCorrectUrl(url:string) {
+        if (url.startsWith(this.mustStartWith)){            
+            return true
+        }
+        return false
+    }
     async extractNewInUrl(url: string): Promise<NewScrapedI> {
         // https://www.eldiario.es/politica/gobierno-rebajara-iva-gas-21-5_1_9280249.html
         console.log("\n---");
         console.log("extracting full new in url:")
         console.log(url);
         console.log("---");
+
+        if (!this.checkCorrectUrl(url)){
+            console.log("INCORRECT url ", url);
+            return {} as NewScrapedI
+        }
+
+
+
 
         try {
             await this.initializePuppeteer();

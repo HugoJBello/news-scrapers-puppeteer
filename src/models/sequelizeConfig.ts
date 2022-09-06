@@ -12,6 +12,7 @@ import {GlobalConfigSql, globalConfigSqlAttributes} from "./GlobalConfigSql";
 export const sequelize =  new Sequelize({
     storage: './database_news.sqlite3',
     dialect: 'sqlite',
+    logging: false
 })
 
 export const initDb = async () => {
