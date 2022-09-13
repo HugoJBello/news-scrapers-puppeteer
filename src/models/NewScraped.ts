@@ -14,4 +14,5 @@ export interface NewScrapedI {
     url: string
     scraperId: string
     id: string
+    newsIndex: number
 }

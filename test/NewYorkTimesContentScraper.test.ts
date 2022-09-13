@@ -14,7 +14,7 @@ describe('NewYorkTimesContentScraper.test', function () {
 
         it('NewYorkTimesContentScraper', async function () {
             const url ="https://www.nytimes.com/live/2021/01/27/us/biden-trump-impeachment"
-            const result = await scraper.extractNewInUrl(url);
+            const result = await scraper.extractNewInUrl(url, "", 0);
             expect(result).to.have.property("content")
             expect(result).to.have.property("date")
             expect(result).to.have.property("scrapedAt")

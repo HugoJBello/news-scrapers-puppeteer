@@ -15,7 +15,7 @@ describe('GuardianNewContentScraper 1', function () {
         it('GuardianNewContentScraper', async function () {
             //const url ="https://www.theguardian.com/film/2021/jan/06/ham-on-rye-review-subversive-satire" // "https://www.thesun.co.uk/tvandshowbiz/13409249/mark-wright-found-car-stolen-essex/"
             const url = "https://www.theguardian.com/us-news/2022/sep/01/california-last-nuclear-power-plant-keep-open"
-            const result = await scraper.extractNewInUrl(url);
+            const result = await scraper.extractNewInUrl(url, "", 0);
             console.log(result);
             expect(result).to.have.property("content")
             expect(result).to.have.property("date")

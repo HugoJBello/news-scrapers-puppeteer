@@ -17,6 +17,7 @@ export interface NewScrapedSqlI {
     url: string
     scraperId: string
     id: string
+    newsIndex: number
 }
 
 export class NewScrapedSql extends Model<NewScrapedSqlI> {
@@ -59,6 +60,9 @@ export const newScrapedSqlAttributes = {
     },
     scraperId: {
         type: DataTypes.STRING,
+    },
+    newsIndex: {
+        type: DataTypes.NUMBER,
     }
 } as any
 

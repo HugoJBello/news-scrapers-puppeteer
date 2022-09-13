@@ -27,7 +27,7 @@ export class ElDiarioesContentScraper extends ContentScraper {
         }
         return false
     }
-    async extractNewInUrl(url: string): Promise<NewScrapedI> {
+    async extractNewInUrl(url: string, scrapingId:string, newsIndex:number): Promise<NewScrapedI> {
         // https://www.eldiario.es/politica/gobierno-rebajara-iva-gas-21-5_1_9280249.html
         console.log("\n---");
         console.log("extracting full new in url:")
@@ -71,6 +71,7 @@ export class ElDiarioesContentScraper extends ContentScraper {
                 description,
                 scraperId: this.scraperId,
                 newspaper: this.newspaper,
+                newsIndex: newsIndex,
                 scrapedAt: new Date()
             } as NewScrapedI
             return results;
