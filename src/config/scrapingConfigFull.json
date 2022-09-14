@@ -2,6 +2,7 @@
   "scraperId": "scraperTest",
   "deviceId": "deviceTest",
   "appId": "deviceTestApp",
+  "apiUrl2":"http://localhost:3000",
   "apiUrl":"https://walrus-app-kitxm.ondigitalocean.app/news-scraper-api2",
   "useSqliteDb": true,
   "useMongoDb": false,

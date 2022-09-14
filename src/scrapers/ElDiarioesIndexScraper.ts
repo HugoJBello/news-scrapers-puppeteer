@@ -89,8 +89,8 @@ export class ElDiarioesIndexScraper extends IndexScraper {
     }
 
     async extractUrlsFromPage(): Promise<string[]>{
-
-        let hrefs = await this.page.$$eval('a', (as:any) => as.map((a:any) => a.href));
+        let main = await this.page.$("main")
+        let hrefs = await main.$$eval('a', (as:any) => as.map((a:any) => a.href));
         const date_regex = /[0-9]{7}.html$/
         //_9282003.html
 
