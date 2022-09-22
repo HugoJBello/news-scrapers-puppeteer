@@ -4,6 +4,7 @@ import {NewScrapedI} from "../models/NewScraped";
 import {ScrapingIndexI} from "../models/ScrapingIndex";
 import {ContentScraper} from "./ContentScraper";
 import {v4} from 'uuid'
+import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
 
 export class NewYorkTimesContentScraper extends ContentScraper {
     public timeWaitStart: number
@@ -43,7 +44,7 @@ export class NewYorkTimesContentScraper extends ContentScraper {
 
             const div = await this.page.$('div.pg-rail-tall__body');
 
-            const [headline, content, date, author, image, tags, description] = await Promise.all([this.extractHeadline(), this.extractBody(), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractDescription()])
+            const [headline, content, contentMarkdown, date, author, image, tags, description] = await Promise.all([this.extractHeadline(), this.extractBody(),this.extractBodyMarkdown(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractDescription()])
 
             await this.browser.close();
             //await this.page.waitFor(this.timeWaitStart);
@@ -52,6 +53,7 @@ export class NewYorkTimesContentScraper extends ContentScraper {
                 id: v4(),
                 url,
                 content,
+                contentMarkdown,
                 headline,
                 tags,
                 date,
@@ -80,8 +82,19 @@ export class NewYorkTimesContentScraper extends ContentScraper {
             for (let par of pars) {
                 const textPar = await this.page.evaluate(element => element.textContent, par);
                 text = text + '\n ' + this.cleanParagprah(textPar)
-
             }
+            return text
+        } catch (e) {
+            console.log(e)
+            return null
+        }
+
+    }
+
+    async extractBodyMarkdown(div: any) {
+        try {
+            const inner_html =  await this.page.evaluate(() => document.querySelector('main').innerHTML);
+            const text = NodeHtmlMarkdown.translate(inner_html)
             return text
         } catch (e) {
             console.log(e)

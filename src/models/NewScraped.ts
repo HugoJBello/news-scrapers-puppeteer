@@ -8,6 +8,7 @@ export interface NewScrapedI {
     date: Date
     scrapedAt: Date
     content: string
+    contentMarkdown: string
     headline: string
     description: string
     tags: string[]

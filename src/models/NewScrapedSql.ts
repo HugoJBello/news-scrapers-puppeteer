@@ -49,6 +49,9 @@ export const newScrapedSqlAttributes = {
     content: {
         type: DataTypes.STRING,
     },
+    contentMarkdown: {
+        type: DataTypes.STRING,
+    },
     headline: {
         type: DataTypes.STRING,
     },

@@ -4,6 +4,7 @@ import {NewScrapedI} from "../models/NewScraped";
 import {ScrapingIndexI} from "../models/ScrapingIndex";
 import {ContentScraper} from "./ContentScraper";
 import {v4} from 'uuid'
+import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
 
 export class GuardianNewContentScraper extends ContentScraper {
     public timeWaitStart: number
@@ -40,7 +41,7 @@ export class GuardianNewContentScraper extends ContentScraper {
             }
 
             const div = await this.page.$('article');
-            const [headline, content, date, author, image, tags, description] = await Promise.all([this.extractHeadline(), this.extractBody(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractDescription()])
+            const [headline, content,contentMarkdown, date, author, image, tags, description] = await Promise.all([this.extractHeadline(), this.extractBody(div),this.extractBodyMarkdown(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractDescription()])
 
             await this.browser.close();
 
@@ -48,6 +49,7 @@ export class GuardianNewContentScraper extends ContentScraper {
                 id: v4(),
                 url,
                 content,
+                contentMarkdown,
                 headline,
                 tags,
                 date,
@@ -88,6 +90,20 @@ export class GuardianNewContentScraper extends ContentScraper {
         }
 
     }
+
+
+    async extractBodyMarkdown(div: any) {
+        try {
+            const inner_html =  await this.page.evaluate(() => document.querySelector('.article-body-commercial-selector').innerHTML);
+            const text = NodeHtmlMarkdown.translate(inner_html)
+            return text
+        } catch (e) {
+            console.log(e)
+            return null
+        }
+
+    }
+
 
     cleanUp = (text: string) => {
         return text.replace(/\n/g, " ")
