@@ -111,7 +111,7 @@ export class NewYorkTimesContentScraper extends ContentScraper {
                     }
 
                     if (markdownText !== ""){
-                        text = text + '\n' + markdownText
+                        text = text + '\n\n' + markdownText
                     }
                 }
             }
