@@ -112,8 +112,27 @@ export class ElDiarioesContentScraper extends ContentScraper {
 
     async extractBodyMarkdown(div: any) {
         try {
-            const inner_html =  await this.page.evaluate(() => document.querySelector('main').innerHTML);
-            const text = NodeHtmlMarkdown.translate(inner_html)
+            const pars = await this.page.$$("p.article-text, h3.article-text, h2.article-text")
+            let text = ''
+            for (let par of pars) {
+                let tagName = await (await par.getProperty('tagName')).jsonValue()
+                tagName = tagName.toLocaleLowerCase()
+                
+                let inner_html = await this.page.evaluate(element => element.innerHTML, par);
+                const hasExcludedText = this.excludedParagraphs.some((text) => inner_html == text)
+                if (!hasExcludedText) {
+                    let markdownText = NodeHtmlMarkdown.translate(inner_html).trim()
+                    
+                    if (markdownText.trim() !== "" && (tagName === "h1" || tagName === "h2" || tagName === "h3")){
+                        markdownText = markdownText.trim()
+                        markdownText = "## " + markdownText
+                    }
+
+                    if (markdownText !== ""){
+                        text = text + '\n' + markdownText
+                    }
+                }
+            }
             return text
         } catch (e) {
             console.log(e)
