@@ -143,7 +143,7 @@ export default class ScraperApp {
         const indexScraper = {} as ScrapingIndexI
         indexScraper.urlIndex = 0
         indexScraper.startingUrls = this.config.scrapingSettings[newspaper].startingUrls
-        indexScraper.pageNewIndex = 1
+        indexScraper.pageNewIndex = 0
         indexScraper.newspaper = newspaper
         indexScraper.scraperId = this.config.scraperId
         indexScraper.deviceId = this.config.deviceId
@@ -178,7 +178,7 @@ export default class ScraperApp {
 
         if (scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex >= urls.length - 1) {
             console.log("RESETING_____________")
-            scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 1
+            scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 0
             await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
         }
 
