@@ -7,12 +7,19 @@
   "useSqliteDb": true,
   "useMongoDb": false,
   "newspapers": [
+    "publico",
     "eldiario.es",
     "newyorktimes",
     "guardianus",
     "guardianuk"
   ],
   "scrapingSettings": {
+    "publico": {
+      "maxPages": 1,
+      "startingUrls": [
+        "https://www.publico.es/"
+      ]
+    },
     "eldiario.es": {
       "maxPages": 1,
       "startingUrls": [

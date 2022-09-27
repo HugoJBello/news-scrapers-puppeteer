@@ -16,6 +16,8 @@ import { GuardianNewContentScraper } from './scrapers/GuardianNewContentScraper'
 import { GuardianNewIndexScraper } from './scrapers/GuardianNewIndexScraper';
 import { ElDiarioesIndexScraper } from './scrapers/ElDiarioesIndexScraper';
 import { ElDiarioesContentScraper } from './scrapers/ElDiarioesContentScraper';
+import { PublicoIndexScraper } from './scrapers/PublicoIndexScraper';
+import { PublicoContentScraper } from './scrapers/PublicoContentScraper';
 
 require('dotenv').config();
 
@@ -45,6 +47,16 @@ export default class ScraperApp {
         for (let newspaper of newspapersReordered) {
             console.log("loading index for " + newspaper)
             
+            if (newspaper === "publico") {
+                const indexScraper = await this.prepareIndex(newspaper)
+                console.log(indexScraper)
+                const scraper = {
+                    pageScraper: new PublicoContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new PublicoIndexScraper(indexScraper)
+                } as ScraperTuple
+                this.scrapers.push(scraper)
+            }
+
             if (newspaper === "eldiario.es") {
                 const indexScraper = await this.prepareIndex(newspaper)
                 console.log(indexScraper)
