@@ -10,7 +10,7 @@ describe('GuardianIndexScraper 1', function () {
 
         const date = new Date()
         const testIndex = {urlIndex:1, pageNewIndex:2, startingUrls:
-                ["https://www.theguardian.com/uk/commentisfree",]
+                ["https://www.theguardian.com/",]
         } as ScrapingIndexI
 
         const scraper = new GuardianNewIndexScraper(testIndex);

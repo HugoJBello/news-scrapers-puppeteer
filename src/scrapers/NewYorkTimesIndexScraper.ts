@@ -90,12 +90,18 @@ export class NewYorkTimesIndexScraper extends IndexScraper {
     }
 
     async extractUrlsFromPage(): Promise<string[]>{
-        let hrefs = await this.page.$$eval('a', (as:any) => as.map((a:any) => a.href));
+        let hrefs = await this.page.$$('section>a')
+        const urls = []
+        for (const hrefv of hrefs){
+            let url = await this.page.evaluate((a:any) => a.href, hrefv);
+            urls.push(url)
+        }
+ 
         const date_regex = /(\d{4})([\/-])(\d{1,2})\2(\d{1,2})/
-
         //hrefs = ["https://edition.cnn.com/2020/12/24/media/biden-trump-media/index.html"]
 
-        return hrefs.filter((href: string) => {
+
+        return urls.filter((href: string) => {
             return date_regex.test(href) && !href.includes("/videos/")
         })
     }
