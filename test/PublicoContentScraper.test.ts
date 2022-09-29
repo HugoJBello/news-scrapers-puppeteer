@@ -16,7 +16,7 @@ describe('PublicoContentScraper 1', function () {
         it('PublicoContentScraper', async function () {
 
             const url = "https://www.publico.es/internacional/cordon-democratico-ultraderecha-cae-europa-abre-paso-normalizacion.html#md=modulo-portada-ancho-completo:t1;mm=mobile-big"
-            const result = await scraper.extractNewInUrl(url, "", 0);
+            const result = await scraper.extractNewInUrl(url, "", 0, 0);
             console.log(result);
             expect(result).to.have.property("content")
             expect(result).to.have.property("date")

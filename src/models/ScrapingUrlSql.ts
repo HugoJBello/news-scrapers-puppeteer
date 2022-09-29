@@ -1,7 +1,4 @@
 import {DataTypes, Model} from 'sequelize';
-import {ScrapingIndexI} from "./ScrapingIndex";
-import {sequelize} from "./sequelizeConfig";
-
 
 export interface ScrapingUrlsSqlI {
     id: string

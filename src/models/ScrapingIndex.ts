@@ -14,6 +14,7 @@ export interface ScrapingIndexI {
     scraperId: string;
     deviceId: string;
     id:number;
+    scrapingIteration:number;
 }
 
 export const joiningStr = "====="

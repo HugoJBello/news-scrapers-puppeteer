@@ -15,6 +15,7 @@ export interface ScrapingIndexSqlI {
     scraperId: string;
     deviceId: string;
     id: number;
+    scrapingIteration: number;
 }
 
 export const scrapingIndexSqlAttributes = {
@@ -30,7 +31,7 @@ export const scrapingIndexSqlAttributes = {
         type: DataTypes.NUMBER,
     },
     pageNewIndex: {
-        type: DataTypes.STRING,
+        type: DataTypes.NUMBER,
     },
     pageIndexSection: {
         type: DataTypes.NUMBER,
@@ -52,7 +53,10 @@ export const scrapingIndexSqlAttributes = {
     },
     deviceId: {
         type: DataTypes.STRING,
-    }
+    },
+    scrapingIteration: {
+        type: DataTypes.NUMBER,
+    },
 }
 
 export const joiningStrUrls = "====="

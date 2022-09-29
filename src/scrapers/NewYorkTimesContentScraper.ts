@@ -21,7 +21,7 @@ export class NewYorkTimesContentScraper extends ContentScraper {
         this.timeWaitClick = 500
     }
 
-    async extractNewInUrl(url: string, scrapingId:string, newsIndex:number): Promise<NewScrapedI> {
+    async extractNewInUrl(url: string, scrapingId:string, newsIndex:number, scrapingIteration: number): Promise<NewScrapedI> {
         // https://www.nytimes.com/live/2021/01/26/us/biden-trump-impeachment
         console.log("\n---");
         console.log("extracting full new in url:")
@@ -63,7 +63,8 @@ export class NewYorkTimesContentScraper extends ContentScraper {
                 scraperId: this.scraperId,
                 newspaper: this.newspaper,
                 newsIndex: newsIndex,
-                scrapedAt: new Date()
+                scrapedAt: new Date(),
+                scrapingIteration: scrapingIteration
             } as NewScrapedI
             return results;
 

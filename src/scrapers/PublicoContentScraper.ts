@@ -29,7 +29,7 @@ export class PublicoContentScraper extends ContentScraper {
         }
         return false
     }
-    async extractNewInUrl(url: string, scrapingId:string, newsIndex:number): Promise<NewScrapedI> {
+    async extractNewInUrl(url: string, scrapingId:string, newsIndex:number, scrapingIteration: number): Promise<NewScrapedI> {
         // https://www.publico.es/internacional/cordon-democratico-ultraderecha-cae-europa-abre-paso-normalizacion.html#md=modulo-portada-ancho-completo:t1;mm=mobile-big
         
         console.log("\n---");
@@ -76,7 +76,8 @@ export class PublicoContentScraper extends ContentScraper {
                 scraperId: this.scraperId,
                 newspaper: this.newspaper,
                 newsIndex: newsIndex,
-                scrapedAt: new Date()
+                scrapedAt: new Date(),
+                scrapingIteration: scrapingIteration
             } as NewScrapedI
             return results;
 

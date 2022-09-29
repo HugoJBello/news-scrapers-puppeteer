@@ -21,7 +21,7 @@ export class GuardianNewContentScraper extends ContentScraper {
         this.timeWaitClick = 500
     }
 
-    async extractNewInUrl(url: string, scrapingId:string, newsIndex:number): Promise<NewScrapedI> {
+    async extractNewInUrl(url: string, scrapingId:string, newsIndex:number, scrapingIteration: number): Promise<NewScrapedI> {
         // https://www.theguardian.com/film/2021/jan/06/ham-on-rye-review-subversive-satire
         console.log("\n---");
         console.log("extracting full new in url:")
@@ -59,7 +59,8 @@ export class GuardianNewContentScraper extends ContentScraper {
                 scraperId: this.scraperId,
                 newspaper: this.newspaper,
                 newsIndex: newsIndex,
-                scrapedAt: new Date()
+                scrapedAt: new Date(),
+                scrapingIteration: scrapingIteration
             } as NewScrapedI
             return results;
 

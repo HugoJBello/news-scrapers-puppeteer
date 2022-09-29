@@ -2,7 +2,6 @@
 
 import {DataTypes, Model} from 'sequelize';
 import {NewScrapedI} from "./NewScraped";
-import {sequelize} from "./sequelizeConfig";
 
 export interface NewScrapedSqlI {
     newspaper: string
@@ -16,6 +15,7 @@ export interface NewScrapedSqlI {
     tags: string
     url: string
     scraperId: string
+    scrapingIteration: number
     id: string
     newsIndex: number
 }
@@ -65,6 +65,9 @@ export const newScrapedSqlAttributes = {
         type: DataTypes.STRING,
     },
     newsIndex: {
+        type: DataTypes.NUMBER,
+    },
+    scrapingIteration: {
         type: DataTypes.NUMBER,
     }
 } as any

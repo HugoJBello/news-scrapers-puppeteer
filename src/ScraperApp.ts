@@ -142,6 +142,7 @@ export default class ScraperApp {
         console.log("@---------------------------------------@")
         const indexScraper = {} as ScrapingIndexI
         indexScraper.urlIndex = 0
+        indexScraper.scrapingIteration = 0
         indexScraper.startingUrls = this.config.scrapingSettings[newspaper].startingUrls
         indexScraper.pageNewIndex = 0
         indexScraper.newspaper = newspaper
@@ -173,11 +174,10 @@ export default class ScraperApp {
         await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
 
         const urls = await scraperTuple.urlSectionExtractorScraper.extractNewsUrlsInSectionPageFromIndexOneIteration()
-        console.log("starting scraping urls ")
+        console.log("--->  starting scraping urls ")
         console.log(urls)
 
         if (scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex >= urls.length - 1) {
-            console.log("RESETING_____________")
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 0
             await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
         }
@@ -192,7 +192,7 @@ export default class ScraperApp {
                 console.log(url)
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
 
-                let extractedNews = await scraperTuple.pageScraper.extractNewInUrl(url, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scraperId, scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex)
+                let extractedNews = await scraperTuple.pageScraper.extractNewInUrl(url, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scraperId, scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration)
                 console.log(extractedNews)
                 await this.persistenceManager.saveNewsScraped(extractedNews)
             }
@@ -206,6 +206,7 @@ export default class ScraperApp {
     }
 
     async setUpNextIteration(scraperTuple: ScraperTuple) {
+        console.log("---> Preparing for next iteration")
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex + 1
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 1
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageIndexSection = 1
@@ -213,7 +214,7 @@ export default class ScraperApp {
         if (scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex > scraperTuple.urlSectionExtractorScraper.scrapingIndex.startingUrls.length - 1) {
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex = 0
         }
-
+        scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration = scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration + 1
         await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
     }
 

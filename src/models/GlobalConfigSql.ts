@@ -1,7 +1,4 @@
 import {DataTypes, Model} from 'sequelize';
-import {ScrapingIndexI} from "./ScrapingIndex";
-import {ScrapingUrlsSqlI} from "./ScrapingUrlSql";
-
 
 export interface GlobalConfigSqlSqlI {
     lastActive: Date;
