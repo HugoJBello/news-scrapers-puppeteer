@@ -7,9 +7,9 @@
   "useSqliteDb": true,
   "useMongoDb": false,
   "newspapers": [
+    "newyorktimes",
     "publico",
     "eldiario.es",
-    "newyorktimes",
     "guardianus",
     "guardianuk"
   ],

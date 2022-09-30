@@ -11,6 +11,7 @@ export interface ScrapingIndexI {
     newspaper: string;
     reviewsSource: string;
     startingUrls: string[];
+    currentScrapingUrlList: string[];
     scraperId: string;
     deviceId: string;
     id:number;

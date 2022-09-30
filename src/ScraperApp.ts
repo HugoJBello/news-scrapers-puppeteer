@@ -174,6 +174,7 @@ export default class ScraperApp {
         await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
 
         const urls = await scraperTuple.urlSectionExtractorScraper.extractNewsUrlsInSectionPageFromIndexOneIteration()
+        scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingUrlList = urls
         console.log("--->  starting scraping urls ")
         console.log(urls)
 
