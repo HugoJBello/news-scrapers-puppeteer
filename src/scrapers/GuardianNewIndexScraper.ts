@@ -32,8 +32,9 @@ export class GuardianNewIndexScraper extends IndexScraper {
     async extractUrlsFromStartingUrl(url: string): Promise<string[]> {
             try {
                 const urls = await this.extractUrlsInPage(url)
-                this.urls = this.urls.concat(urls)
-            } catch (e) {
+                //this.urls = this.urls.concat(urls)
+                this.urls = urls
+                } catch (e) {
                 console.log(e)
                 return this.urls
             }
