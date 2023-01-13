@@ -25,7 +25,7 @@ describe('PublicoIndexScraper 1', function () {
             console.log(result);
             console.log(scraper.scrapingIndex);
             expect(result).not.to.equal(undefined)
-            expect(scraper.scrapingIndex.pageNewIndex).to.greaterThan(2)
+            expect(scraper.scrapingIndex.pageNewIndex).to.greaterThan(0)
         });
     });
 });

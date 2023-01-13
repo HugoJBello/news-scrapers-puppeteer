@@ -12,3 +12,6 @@ run single test using it(..) handle:
 
 
     npm test -- --grep "ElDiarioesIndexScraper"
+    npm test -- --grep "PublicoIndexScraper"
+    npm test -- --grep "GuardianIndexScraper"    
+    npm test -- --grep "NewYorkTimesIndexScraper"
