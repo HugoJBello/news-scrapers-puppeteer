@@ -19,7 +19,7 @@ import axios from 'axios';
 
 
 export default class ApiManager {
-    public url = ""
+    public url = "http://localhost:3000"
 
     constructor(config: ScrapingConfigI) {
         this.url = config.apiUrl
