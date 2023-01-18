@@ -13,7 +13,7 @@ export interface ScrapingIndexBatchSqlI {
   scrapingIteration:number;
 }
 
-export const scrapingIndexSqlAttributes = {
+export const scrapingIndexBatchSqlAttributes = {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -25,7 +25,9 @@ export const scrapingIndexSqlAttributes = {
   newspaper: {
     type: DataTypes.STRING
   },
-  
+  scrapingIndexesIds: {
+    type: DataTypes.STRING
+  },
   scraperId: {
     type: DataTypes.STRING
   },
