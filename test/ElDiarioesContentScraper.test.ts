@@ -15,7 +15,7 @@ describe('ElDiarioesContentScraper 1', function () {
 
         it('ElDiarioesContentScraper', async function () {
 
-            const url = "https://www.eldiario.es/politica/gobierno-rebajara-iva-gas-21-5_1_9280249.html"
+            const url = "https://www.eldiario.es/catalunya/abogacia-suma-fiscalia-pide-puigdemont-sea-procesado-malversacion-desordenes-publicos_1_9876460.html"
             const result = await scraper.extractNewInUrl(url, "", 0, 0);
             console.log(result);
             expect(result).to.have.property("content")
