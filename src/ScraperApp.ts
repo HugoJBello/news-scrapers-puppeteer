@@ -18,6 +18,7 @@ import { ElDiarioesIndexScraper } from './scrapers/ElDiarioesIndexScraper';
 import { ElDiarioesContentScraper } from './scrapers/ElDiarioesContentScraper';
 import { PublicoIndexScraper } from './scrapers/PublicoIndexScraper';
 import { PublicoContentScraper } from './scrapers/PublicoContentScraper';
+import { NewScrapedI } from './models/NewScraped';
 
 require('dotenv').config();
 
@@ -183,22 +184,31 @@ export default class ScraperApp {
             await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
         }
 
+        const newsBatch: NewScrapedI[]= []
+
         while (scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex <= urls.length - 1) {
             scraperTuple.urlSectionExtractorScraper.scrapingIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex
 
             const url = urls[scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex]
+
             if (url) {
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
                 console.log("scraping url " + "page: " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + " url number: " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex)
                 console.log(url)
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
 
-                let extractedNews = await scraperTuple.pageScraper.extractNewInUrl(url, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scraperId, scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration)
+                const extractedNews = await scraperTuple.pageScraper.extractNewInUrl(url, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scraperId, scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration)
                 console.log(extractedNews)
+                
+                newsBatch.push(extractedNews)
                 await this.persistenceManager.saveNewsScraped(extractedNews)
             }
 
+            const ids = newsBatch.map(item => item.id)
+            
+            scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingIdList = ids
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + 1
+            
             await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
             await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
         }
