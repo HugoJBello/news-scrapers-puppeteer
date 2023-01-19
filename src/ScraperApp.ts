@@ -204,20 +204,23 @@ export default class ScraperApp {
                 await this.persistenceManager.saveNewsScraped(extractedNews)
             }
 
-            const ids = newsBatch.map(item => item.id)
             
-            scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingIdList = ids
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + 1
             
             await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
             await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
         }
 
-        await this.setUpNextIteration(scraperTuple)
+       
+        await this.setUpNextIteration(scraperTuple, newsBatch)
     }
 
-    async setUpNextIteration(scraperTuple: ScraperTuple) {
+    async setUpNextIteration(scraperTuple: ScraperTuple, newsBatch: NewScrapedI[]) {
         console.log("---> Preparing for next iteration")
+
+        const ids = newsBatch.map(item => item.id)
+        scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingIdList = ids
+
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex + 1
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 1
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageIndexSection = 1
