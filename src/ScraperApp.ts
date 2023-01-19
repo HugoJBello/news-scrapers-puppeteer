@@ -19,9 +19,15 @@ import { ElDiarioesContentScraper } from './scrapers/ElDiarioesContentScraper';
 import { PublicoIndexScraper } from './scrapers/PublicoIndexScraper';
 import { PublicoContentScraper } from './scrapers/PublicoContentScraper';
 import { NewScrapedI } from './models/NewScraped';
+import { createHash } from 'node:crypto';
 
+ 
 require('dotenv').config();
 
+
+const sha256 =(content:string) => {  
+    return createHash('sha256').update(content).digest('hex')
+  }
 
 export interface ScraperTuple {
     pageScraper: ContentScraper;
@@ -175,16 +181,22 @@ export default class ScraperApp {
         await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
 
         const urls = await scraperTuple.urlSectionExtractorScraper.extractNewsUrlsInSectionPageFromIndexOneIteration()
+        const ids = urls.map(url => sha256(url))
+
+        console.log(ids)
+
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingUrlList = urls
+        scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingIdList = ids
+        
         console.log("--->  starting scraping urls ")
         console.log(urls)
 
+
         if (scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex >= urls.length - 1) {
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 0
-            await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
         }
 
-        const newsBatch: NewScrapedI[]= []
+        await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
 
         while (scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex <= urls.length - 1) {
             scraperTuple.urlSectionExtractorScraper.scrapingIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex
@@ -198,9 +210,10 @@ export default class ScraperApp {
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
 
                 const extractedNews = await scraperTuple.pageScraper.extractNewInUrl(url, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scraperId, scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration)
+                extractedNews.id = await sha256(url)
+                
                 console.log(extractedNews)
                 
-                newsBatch.push(extractedNews)
                 await this.persistenceManager.saveNewsScraped(extractedNews)
             }
 
@@ -212,15 +225,13 @@ export default class ScraperApp {
         }
 
        
-        await this.setUpNextIteration(scraperTuple, newsBatch)
+        await this.setUpNextIteration(scraperTuple)
     }
 
-    async setUpNextIteration(scraperTuple: ScraperTuple, newsBatch: NewScrapedI[]) {
+    async setUpNextIteration(scraperTuple: ScraperTuple) {
         console.log("---> Preparing for next iteration")
 
-        const ids = newsBatch.map(item => item.id)
-        scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingIdList = ids
-
+        
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex + 1
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 1
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageIndexSection = 1
