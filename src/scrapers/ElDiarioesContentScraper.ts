@@ -1,15 +1,9 @@
-import {PuppeteerScraper} from './PuppeteerScraper'
-import htmlToText from 'html-to-text'
 import {NewScrapedI} from "../models/NewScraped";
-import {ScrapingIndexI} from "../models/ScrapingIndex";
 import {ContentScraper} from "./ContentScraper";
-import {v4} from 'uuid'
 import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
 
 
 export class ElDiarioesContentScraper extends ContentScraper {
-    public timeWaitStart: number
-    public timeWaitClick: number
     public newspaper: string
     public scraperId: string
     public excludedParagraphs: string[] = [' ', '  ', ' \n', '  \n']
@@ -19,8 +13,6 @@ export class ElDiarioesContentScraper extends ContentScraper {
         super();
         this.newspaper = newspaper
         this.scraperId = scraperId
-        this.timeWaitStart = 1 * 1000
-        this.timeWaitClick = 500
     }
 
     checkCorrectUrl(url:string) {
@@ -62,7 +54,6 @@ export class ElDiarioesContentScraper extends ContentScraper {
             await this.browser.close();
 
             let results = {
-                id: v4(),
                 url,
                 content,
                 contentMarkdown,

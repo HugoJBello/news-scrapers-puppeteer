@@ -8,8 +8,6 @@ import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
 
 
 export class PublicoContentScraper extends ContentScraper {
-    public timeWaitStart: number
-    public timeWaitClick: number
     public newspaper: string
     public scraperId: string
     public excludedParagraphs: string[] = [' ', '  ', ' \n', '  \n']
@@ -19,8 +17,6 @@ export class PublicoContentScraper extends ContentScraper {
         super();
         this.newspaper = newspaper
         this.scraperId = scraperId
-        this.timeWaitStart = 1 * 1000
-        this.timeWaitClick = 500
     }
 
     checkCorrectUrl(url:string) {

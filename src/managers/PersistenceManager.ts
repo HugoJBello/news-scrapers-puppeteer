@@ -1,24 +1,25 @@
 import {
     ScrapingIndexI,
-} from './models/ScrapingIndex';
+} from '../models/ScrapingIndex';
 
-import {ScrapingConfigI} from "./models/ScrapingConfig";
+import {ScrapingConfigI} from "../models/ScrapingConfig";
 import {
     convertScrapingIndexSqlI,
     convertToScrapingIndexSqlI, obtainScrapingIUrlsSqlI,
     ScrapingIndexSql,
     ScrapingIndexSqlI
-} from "./models/ScrapingIndexSql";
-import {convertToNewsScrapedSqlI, NewScrapedSql} from "./models/NewScrapedSql";
-import {NewScrapedI} from "./models/NewScraped";
-import {ScrapingUrlsSql, ScrapingUrlsSqlI} from "./models/ScrapingUrlSql";
-import {GlobalConfigSql} from "./models/GlobalConfigSql";
-import {GlobalConfigI} from "./models/GlobalConfig";
+} from "../models/ScrapingIndexSql";
+import {convertToNewsScrapedSqlI, NewScrapedSql} from "../models/NewScrapedSql";
+import {NewScrapedI} from "../models/NewScraped";
+import {ScrapingUrlsSql, ScrapingUrlsSqlI} from "../models/ScrapingUrlSql";
+import {GlobalConfigSql} from "../models/GlobalConfigSql";
+import {GlobalConfigI} from "../models/GlobalConfig";
 import ApiManager from './ApiManager';
 
 require('dotenv').config();
 
 export default class PersistenceManager {
+    
     public config: ScrapingConfigI = {} as ScrapingConfigI
     public apiManager: ApiManager
 

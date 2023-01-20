@@ -7,8 +7,6 @@ import {v4} from 'uuid'
 import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
 
 export class NewYorkTimesContentScraper extends ContentScraper {
-    public timeWaitStart: number
-    public timeWaitClick: number
     public newspaper: string
     public scraperId: string
     public excludedParagraphs = ['Send any friend a story', 'As a subscriber, you have 10 gift articles to give each month. Anyone can read what you share.', 'Supported by', "Advertisement", "Something went wrong. Please try again later", "We use cookies and similar methods to recognize visitors"]
@@ -17,8 +15,6 @@ export class NewYorkTimesContentScraper extends ContentScraper {
         super();
         this.newspaper = newspaper
         this.scraperId = scraperId
-        this.timeWaitStart = 1 * 1000
-        this.timeWaitClick = 500
     }
 
     async extractNewInUrl(url: string, scrapingId:string, newsIndex:number, scrapingIteration: number): Promise<NewScrapedI> {
@@ -50,7 +46,6 @@ export class NewYorkTimesContentScraper extends ContentScraper {
             //await this.page.waitFor(this.timeWaitStart);
 
             let results = {
-                id: v4(),
                 url,
                 content,
                 contentMarkdown,

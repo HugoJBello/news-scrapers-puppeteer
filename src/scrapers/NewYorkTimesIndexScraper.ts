@@ -4,8 +4,6 @@ import {ScrapingIndexI} from "../models/ScrapingIndex";
 import {IndexScraper} from "./IndexScraper";
 
 export class NewYorkTimesIndexScraper extends IndexScraper {
-    public timeWaitStart: number
-    public timeWaitClick: number
     public maxPages: number
     public scrapingIndex: ScrapingIndexI
     public urls:string[] = []
@@ -13,8 +11,6 @@ export class NewYorkTimesIndexScraper extends IndexScraper {
     constructor(scrapingIndex: ScrapingIndexI) {
         super();
         this.scrapingIndex = scrapingIndex
-        this.timeWaitStart = 1 * 1000;
-        this.timeWaitClick = 500;
         this.maxPages = scrapingIndex.maxPages
     }
 

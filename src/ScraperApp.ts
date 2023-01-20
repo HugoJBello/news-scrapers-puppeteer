@@ -7,7 +7,7 @@ import {IndexScraper} from "./scrapers/IndexScraper";
 
 import scrapingConfig from './config/scrapingConfigFull.json';
 
-import PersistenceManager from "./PersistenceManager";
+import PersistenceManager from "./managers/PersistenceManager";
 import {GlobalConfigI} from "./models/GlobalConfig";
 import {NewYorkTimesContentScraper} from "./scrapers/NewYorkTimesContentScraper";
 import {NewYorkTimesIndexScraper} from "./scrapers/NewYorkTimesIndexScraper";
@@ -18,17 +18,12 @@ import { ElDiarioesIndexScraper } from './scrapers/ElDiarioesIndexScraper';
 import { ElDiarioesContentScraper } from './scrapers/ElDiarioesContentScraper';
 import { PublicoIndexScraper } from './scrapers/PublicoIndexScraper';
 import { PublicoContentScraper } from './scrapers/PublicoContentScraper';
-import { NewScrapedI } from './models/NewScraped';
-import { createHash } from 'node:crypto';
-
+import UtilsManager from './managers/UtilsManager';
+  
  
 require('dotenv').config();
 
-
-const sha256 =(content:string) => {  
-    return createHash('sha256').update(content).digest('hex')
-  }
-
+ 
 export interface ScraperTuple {
     pageScraper: ContentScraper;
     urlSectionExtractorScraper: IndexScraper;
@@ -181,15 +176,14 @@ export default class ScraperApp {
         await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
 
         const urls = await scraperTuple.urlSectionExtractorScraper.extractNewsUrlsInSectionPageFromIndexOneIteration()
-        const ids = urls.map(url => sha256(url))
+        const ids = urls.map(url => UtilsManager.createIdFromUrl(url))
 
-        console.log(ids)
 
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingUrlList = urls
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingIdList = ids
         
         console.log("--->  starting scraping urls ")
-        console.log(urls)
+        console.log(ids)
 
 
         if (scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex >= urls.length - 1) {
@@ -210,7 +204,7 @@ export default class ScraperApp {
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
 
                 const extractedNews = await scraperTuple.pageScraper.extractNewInUrl(url, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scraperId, scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex, scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration)
-                extractedNews.id = await sha256(url)
+                extractedNews.id = UtilsManager.createIdFromUrl(url)
                 
                 console.log(extractedNews)
                 
