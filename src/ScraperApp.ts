@@ -19,6 +19,10 @@ import { ElDiarioesContentScraper } from './scrapers/ElDiarioesContentScraper';
 import { PublicoIndexScraper } from './scrapers/PublicoIndexScraper';
 import { PublicoContentScraper } from './scrapers/PublicoContentScraper';
 import UtilsManager from './managers/UtilsManager';
+import { ElPaisContentScraper } from './scrapers/ElPaisContentScraper';
+import { ElPaisIndexScraper } from './scrapers/ElPaisIndexScraper';
+import { ElMundoContentScraper } from './scrapers/ElMundoContentScraper';
+import { ElMundoIndexScraper } from './scrapers/ElMundoIndexScraper';
   
  
 require('dotenv').config();
@@ -65,6 +69,25 @@ export default class ScraperApp {
                 const scraper = {
                     pageScraper: new ElDiarioesContentScraper(indexScraper.scraperId, indexScraper.newspaper),
                     urlSectionExtractorScraper: new ElDiarioesIndexScraper(indexScraper)
+                } as ScraperTuple
+                this.scrapers.push(scraper)
+            }
+
+            if (newspaper === "elpais") {
+                const indexScraper = await this.prepareIndex(newspaper)
+                console.log(indexScraper)
+                const scraper = {
+                    pageScraper: new ElPaisContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new ElPaisIndexScraper(indexScraper)
+                } as ScraperTuple
+                this.scrapers.push(scraper)
+            }
+            if (newspaper === "elmundo") {
+                const indexScraper = await this.prepareIndex(newspaper)
+                console.log(indexScraper)
+                const scraper = {
+                    pageScraper: new ElMundoContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new ElMundoIndexScraper(indexScraper)
                 } as ScraperTuple
                 this.scrapers.push(scraper)
             }

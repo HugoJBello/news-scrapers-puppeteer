@@ -7,6 +7,8 @@
   "useSqliteDb": true,
   "useMongoDb": false,
   "newspapers": [
+    "elpais",
+    "elmundo",
     "eldiario.es",
     "publico",
     "newyorktimes",
@@ -14,6 +16,18 @@
     "guardianuk"
   ],
   "scrapingSettings": {
+    "elpais": {
+      "maxPages": 1,
+      "startingUrls": [
+        "https://elpais.com/"
+      ]
+    },
+    "elmundo": {
+      "maxPages": 1,
+      "startingUrls": [
+        "https://www.elmundo.es/"
+      ]
+    },
     "publico": {
       "maxPages": 1,
       "startingUrls": [
