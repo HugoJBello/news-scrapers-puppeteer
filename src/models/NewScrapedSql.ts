@@ -13,6 +13,8 @@ export interface NewScrapedSqlI {
     content: string
     headline: string
     tags: string
+    figuresUrl: string
+    figuresText: string
     url: string
     scraperId: string
     scrapingIteration: number
@@ -58,6 +60,12 @@ export const newScrapedSqlAttributes = {
     tags:{
         type: DataTypes.STRING,
     },
+    figuresUrl:{
+        type: DataTypes.STRING,
+    },
+    figuresText:{
+        type: DataTypes.STRING,
+    },
     url: {
         type: DataTypes.STRING,
     },
@@ -72,7 +80,8 @@ export const newScrapedSqlAttributes = {
     }
 } as any
 
-export const joiningStrtags = ","
+export const joiningStrtags = ','
+export const joiningStrFigures = '=====' 
 
 
 export const convertToNewsScrapedSqlI = (newScrapedI: NewScrapedI): NewScrapedSqlI => {
@@ -80,6 +89,14 @@ export const convertToNewsScrapedSqlI = (newScrapedI: NewScrapedI): NewScrapedSq
     if (newScrapedSql.tags && Array.isArray(newScrapedSql.tags)){
         const tags = newScrapedSql.tags
         newScrapedSql.tags =  tags.join(joiningStrtags)
+    }
+    if (newScrapedSql.figuresUrl && Array.isArray(newScrapedSql.figuresUrl)){
+        const figuresUrl = newScrapedSql.figuresUrl
+        newScrapedSql.figuresUrl =  figuresUrl.join(joiningStrFigures)
+    }
+    if (newScrapedSql.figuresText && Array.isArray(newScrapedSql.figuresText)){
+        const figuresText = newScrapedSql.figuresText
+        newScrapedSql.figuresText =  figuresText.join(joiningStrFigures)
     }
     return newScrapedSql as NewScrapedSqlI
 }
@@ -89,6 +106,14 @@ export const convertNewsScrapedSqlI = (newScrapedSqlI: NewScrapedSqlI): NewScrap
     if (newScrapedSqlI.tags.includes(joiningStrtags)) {
         const tags = newScrapedSqlI.tags
         index.tags =  tags.split(joiningStrtags)
+    }
+    if (newScrapedSqlI.figuresUrl.includes(joiningStrFigures)) {
+        const figuresUrl = newScrapedSqlI.figuresUrl
+        index.figuresUrl =  figuresUrl.split(joiningStrFigures)
+    }
+    if (newScrapedSqlI.figuresText.includes(joiningStrFigures)) {
+        const figuresText = newScrapedSqlI.figuresText
+        index.figuresText =  figuresText.split(joiningStrFigures)
     }
     return index as NewScrapedI
 }

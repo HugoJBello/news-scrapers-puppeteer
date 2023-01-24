@@ -15,7 +15,7 @@ describe('ElPaisContentScraper 1', function () {
 
         it('ElPaisContentScraper', async function () {
 
-            const url = "https://elpais.com/opinion/2023-01-20/volver.html"
+            const url = "https://elpais.com/tecnologia/2023-01-24/el-via-crucis-de-hacer-tramites-digitales-con-la-administracion-cada-procedimiento-es-un-mundo-con-su-propia-normativa.html"
             const result = await scraper.extractNewInUrl(url, "", 0, 0);
             console.log(result);
             expect(result).to.have.property("content")
@@ -25,6 +25,10 @@ describe('ElPaisContentScraper 1', function () {
             expect(result).to.have.property("scrapedAt")
             expect(result).to.have.property("tags")
             expect(result.tags).not.equal(null)
+            expect(result.figuresText).not.equal(null)
+            expect(result.figuresUrl).not.equal(null)
+            expect(result.figuresUrl).not.equal([])
+            expect( result.figuresUrl ).to.be.an( "array" ).that.is.not.empty
             expect(result.content).not.equal(null)
             expect(result.content).not.equal(undefined)
             expect(result.content).not.equal('')

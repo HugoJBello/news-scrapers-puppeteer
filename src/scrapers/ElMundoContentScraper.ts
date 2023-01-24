@@ -7,7 +7,7 @@ export class ElMundoContentScraper extends ContentScraper {
     public newspaper: string
     public scraperId: string
     public excludedParagraphsEqual: string[] = [' ', '  ', ' \n', '  \n']
-    public excludedParagraphsIncluding: string[] = ['Gracias por elegir EL MUNDO','We and our partners do the following data processing']
+    public excludedParagraphsIncluding: string[] = ['Suscríbete 50% Dto.', 'With your consent,','Gracias por elegir EL MUNDO','We and our partners do the following data processing']
     public mustStartWith = "https://www.elmundo.es/"
 
     constructor(scraperId: string, newspaper: string) {
@@ -49,11 +49,12 @@ export class ElMundoContentScraper extends ContentScraper {
                 return {} as NewScrapedI
             }
 
-            const div = await this.page.$('article');
+            const div = await this.page.$('main');
             const [headline, content,contentMarkdown, date, author, image, tags, description] = await Promise.all([this.extractHeadline(), this.extractBody(div),this.extractBodyMarkdown(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractDescription()])
             
-            await this.browser.close();
+            const {figuresUrl, figuresText} = await this.extractFigures(div)
 
+            await this.browser.close();
             let results = {
                 url,
                 content,
@@ -62,6 +63,8 @@ export class ElMundoContentScraper extends ContentScraper {
                 tags,
                 date,
                 image,
+                figuresUrl, 
+                figuresText,
                 author,
                 description,
                 scraperId: this.scraperId,
@@ -103,6 +106,52 @@ export class ElMundoContentScraper extends ContentScraper {
         }
 
     }
+
+
+
+    async extractFigures(main: any):Promise<any> {
+        let figuresUrl:string[] = []
+        let figuresText:string[] = []
+
+        let figs = await main.$$("figure")
+        //const pics = await main.$$("picture")
+
+        //figs = figs.concat(pics)
+
+        for (let fig of figs){
+            const img = await fig.$("div > div > img")
+            const imgSolo = await fig.$("div > picture > img")
+            const cap = await fig.$("figcaption > span")
+            
+            try {
+                let src = null
+                if (img){
+                    src = await img.getProperty('src');
+                } else if (imgSolo){
+                    src = await imgSolo.getProperty('src');
+                }
+                //const pars = await this.page.$$("div#maincontent")
+                const image = await src.jsonValue();
+                figuresUrl.push(image as string)
+                
+            } catch (e) {
+            }
+
+            if (img || imgSolo){
+                try {
+                    //const pars = await this.page.$$("div#maincontent")
+                    let textPar = await this.page.evaluate(element => element.textContent, cap);
+                    figuresText.push(textPar)
+                } catch (e) {
+                    console.log(e)
+                    figuresText.push("")
+                }
+            }
+            
+    }
+        return {figuresUrl, figuresText}
+    }
+
 
     async extractBodyMarkdown(div: any) {
         try {

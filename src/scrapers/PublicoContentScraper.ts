@@ -55,6 +55,7 @@ export class PublicoContentScraper extends ContentScraper {
 
             const div = await this.page.$('article');
             const [headline, content,contentMarkdown, date, author, image, tags, description] = await Promise.all([this.extractHeadline(), this.extractBody(div),this.extractBodyMarkdown(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractDescription()])
+            const {figuresUrl, figuresText} = await this.extractFigures()
 
             await this.browser.close();
 
@@ -69,6 +70,7 @@ export class PublicoContentScraper extends ContentScraper {
                 image,
                 author,
                 description,
+                figuresUrl, figuresText,
                 scraperId: this.scraperId,
                 newspaper: this.newspaper,
                 newsIndex: newsIndex,
@@ -139,6 +141,39 @@ export class PublicoContentScraper extends ContentScraper {
 
     }
 
+
+    async extractFigures():Promise<any> {
+        let figuresUrl:string[] = []
+        let figuresText:string[] = []
+
+        const figs = await this.page.$$("figure")
+        for (let fig of figs){
+            const img = await fig.$("a > div >  img")
+            const cap = await fig.$("figcaption > span")
+
+            try {
+                //const pars = await this.page.$$("div#maincontent")
+                const src = await img.getProperty('src');
+                const image = await src.jsonValue();
+                figuresUrl.push(image as string)
+                
+            } catch (e) {
+            }
+
+            if (img){
+                try {
+                    //const pars = await this.page.$$("div#maincontent")
+                    let textPar = await this.page.evaluate(element => element.textContent, cap);
+                    figuresText.push(textPar)
+                } catch (e) {
+                    console.log(e)
+                    figuresText.push("")
+                }
+            }
+            
+    }
+        return {figuresUrl, figuresText}
+    }
 
     cleanUp = (text: string) => {
         return text.replace(/\n/g, " ")

@@ -12,6 +12,8 @@ export interface NewScrapedI {
     headline: string
     description: string
     tags: string[]
+    figuresUrl: string[]
+    figuresText: string[]
     url: string
     scraperId: string
     scrapingIteration: number
