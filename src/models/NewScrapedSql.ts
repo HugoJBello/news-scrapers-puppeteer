@@ -106,14 +106,21 @@ export const convertNewsScrapedSqlI = (newScrapedSqlI: NewScrapedSqlI): NewScrap
     if (newScrapedSqlI.tags.includes(joiningStrtags)) {
         const tags = newScrapedSqlI.tags
         index.tags =  tags.split(joiningStrtags)
+    } else {
+        index.tags = [newScrapedSqlI.tags]
     }
     if (newScrapedSqlI.figuresUrl.includes(joiningStrFigures)) {
         const figuresUrl = newScrapedSqlI.figuresUrl
         index.figuresUrl =  figuresUrl.split(joiningStrFigures)
+    } else {
+        index.figuresUrl = [newScrapedSqlI.figuresUrl]
     }
     if (newScrapedSqlI.figuresText.includes(joiningStrFigures)) {
         const figuresText = newScrapedSqlI.figuresText
         index.figuresText =  figuresText.split(joiningStrFigures)
+    } else{
+        index.figuresText =  [newScrapedSqlI.figuresText]
+
     }
     return index as NewScrapedI
 }
