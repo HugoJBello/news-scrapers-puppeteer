@@ -121,6 +121,9 @@ export default class ScraperApp {
         let globalConfig = await this.persistenceManager.findCurrentGlogalConfig()
         if (globalConfig) {
             this.globalConfig = globalConfig
+            this.globalConfig.activeSince = new Date()
+            this.globalConfig.lastActive = this.globalConfig.activeSince
+
         } else {
             console.log("global config nof found, starting new one");
             
@@ -129,6 +132,8 @@ export default class ScraperApp {
             globalConfig.deviceId = this.config.deviceId
             globalConfig.lastNewspaper = this.config.newspapers[0]
             globalConfig.lastActive = new Date()
+            globalConfig.activeSince = globalConfig.lastActive
+            globalConfig.createdAt = globalConfig.lastActive
             this.globalConfig = globalConfig
             await this.persistenceManager.updateGlobalConfig(globalConfig)
         }

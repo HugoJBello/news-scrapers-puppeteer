@@ -2,6 +2,8 @@ import {DataTypes, Model} from 'sequelize';
 
 export interface GlobalConfigSqlSqlI {
     lastActive: Date;
+    createdAt: Date;
+    activeSince: Date;
     scraperId: string;
     lastNewspaper: string;
     deviceId: string;
@@ -15,6 +17,12 @@ export const globalConfigSqlAttributes = {
         autoIncrement: true
     },
     lastActive: {
+        type: DataTypes.DATE,
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+    },
+    activeSince: {
         type: DataTypes.DATE,
     },
     scraperId: {
