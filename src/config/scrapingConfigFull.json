@@ -1,6 +1,6 @@
 {
   "scraperId": "gokuScraper",
-  "deviceId": "g",
+  "deviceId": "goku departamento",
   "appId": "deviceTestApp",
   "apiUrl":"http://localhost:3000",
   "apiUrl2":"https://walrus-app-kitxm.ondigitalocean.app/news-scraper-api2",
