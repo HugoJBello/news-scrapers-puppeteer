@@ -12,6 +12,7 @@ export interface NewScrapedI {
     headline: string
     description: string
     tags: string[]
+    sections: string[]
     figuresUrl: string[]
     figuresText: string[]
     url: string

@@ -27,6 +27,8 @@ describe('ElMundoContentScraper 1', function () {
             expect(result).to.have.property("description")
             expect(result).to.have.property("scrapedAt")
             expect(result).to.have.property("tags")
+            expect(result).to.have.property("sections")
+
             expect(result.tags).not.equal(null)
             expect(result.content).not.equal(null)
             expect(result.figuresUrl).not.equal(null)

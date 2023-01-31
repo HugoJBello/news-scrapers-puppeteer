@@ -13,6 +13,7 @@ export interface NewScrapedSqlI {
     content: string
     headline: string
     tags: string
+    sections: string
     figuresUrl: string
     figuresText: string
     url: string
@@ -60,6 +61,9 @@ export const newScrapedSqlAttributes = {
     tags:{
         type: DataTypes.STRING,
     },
+    sections:{
+        type: DataTypes.STRING,
+    },
     figuresUrl:{
         type: DataTypes.STRING,
     },
@@ -90,6 +94,10 @@ export const convertToNewsScrapedSqlI = (newScrapedI: NewScrapedI): NewScrapedSq
         const tags = newScrapedSql.tags
         newScrapedSql.tags =  tags.join(joiningStrtags)
     }
+    if (newScrapedSql.sections && Array.isArray(newScrapedSql.sections)){
+        const sections = newScrapedSql.sections
+        newScrapedSql.sections =  sections.join(joiningStrtags)
+    }
     if (newScrapedSql.figuresUrl && Array.isArray(newScrapedSql.figuresUrl)){
         const figuresUrl = newScrapedSql.figuresUrl
         newScrapedSql.figuresUrl =  figuresUrl.join(joiningStrFigures)
@@ -109,6 +117,13 @@ export const convertNewsScrapedSqlI = (newScrapedSqlI: NewScrapedSqlI): NewScrap
     } else {
         index.tags = [newScrapedSqlI.tags]
     }
+    if (newScrapedSqlI.sections.includes(joiningStrtags)) {
+        const sections = newScrapedSqlI.sections
+        index.sections =  sections.split(joiningStrtags)
+    } else {
+        index.sections = [newScrapedSqlI.sections]
+    }
+    
     if (newScrapedSqlI.figuresUrl.includes(joiningStrFigures)) {
         const figuresUrl = newScrapedSqlI.figuresUrl
         index.figuresUrl =  figuresUrl.split(joiningStrFigures)

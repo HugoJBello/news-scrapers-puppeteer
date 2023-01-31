@@ -49,7 +49,7 @@ export class ElDiarioesContentScraper extends ContentScraper {
             }
 
             const div = await this.page.$('article');
-            const [headline, content,contentMarkdown, date, author, image, tags, description] = await Promise.all([this.extractHeadline(), this.extractBody(div),this.extractBodyMarkdown(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractDescription()])
+            const [headline, content,contentMarkdown, date, author, image, tags,sections,  description] = await Promise.all([this.extractHeadline(), this.extractBody(div),this.extractBodyMarkdown(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractSections(), this.extractDescription()])
             const {figuresUrl, figuresText} = await this.extractFigures()
 
             await this.browser.close();
@@ -60,6 +60,7 @@ export class ElDiarioesContentScraper extends ContentScraper {
                 contentMarkdown,
                 headline,
                 tags,
+                sections,
                 date,
                 image,
                 author,
@@ -208,6 +209,21 @@ export class ElDiarioesContentScraper extends ContentScraper {
 
     }
 
+    async extractSections(): Promise<string[]> {
+        try {
+            let sections = await this.page.$eval("head > meta[property='article:section']", (element: any) => element.content);
+            if (sections && sections.includes(",")) {
+                return sections.split(",").map((elem: string) => (elem.trim()))
+            }
+            return [sections]
+        } catch (e) {
+            return null
+        }
+
+    }
+
+
+    
 
     async extractHeadline() {
         try {

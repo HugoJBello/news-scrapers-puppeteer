@@ -21,6 +21,7 @@ describe('GuardianNewContentScraper 1', function () {
             expect(result).to.have.property("date")
             expect(result).to.have.property("headline")
             expect(result).to.have.property("description")
+            expect(result).to.have.property("sections")
             expect(result).to.have.property("scrapedAt")
             expect(result).to.have.property("tags")
             expect(result.tags).not.equal(null)
