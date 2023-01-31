@@ -15,4 +15,5 @@ export interface ScrapingConfigI{
 export interface ScrapingSettings{
     maxPages: number;
     startingUrls:string[];
+    logoUrl: string;
 }

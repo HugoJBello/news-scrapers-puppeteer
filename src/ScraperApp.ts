@@ -178,7 +178,9 @@ export default class ScraperApp {
         indexScraper.newspaper = newspaper
         indexScraper.scraperId = this.config.scraperId
         indexScraper.deviceId = this.config.deviceId
-        indexScraper.maxPages = this.config.scrapingSettings[newspaper].maxPages        
+        indexScraper.maxPages = this.config.scrapingSettings[newspaper].maxPages
+        indexScraper.logoUrl =  this.config.scrapingSettings[newspaper].logoUrl
+               
         return indexScraper
     }
 
