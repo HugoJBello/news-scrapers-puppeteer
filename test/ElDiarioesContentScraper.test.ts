@@ -15,7 +15,7 @@ describe('ElDiarioesContentScraper 1', function () {
 
         it('ElDiarioesContentScraper', async function () {
 
-            const url = "https://www.eldiario.es/castilla-y-leon/politica/castilla-leon-inadmite-requerimiento-gobierno-asegura-no-existe-acuerdo-antiaborto_1_9878698.html"
+            const url = "https://www.eldiario.es/politica/sanchez-pacta-marruecos-evitar-ofende-parte-polemicas-sahara-ceuta-melilla_1_9918488.html"
             const result = await scraper.extractNewInUrl(url, "", 0, 0);
             console.log(result);
             expect(result).to.have.property("content")

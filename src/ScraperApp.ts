@@ -257,8 +257,8 @@ export default class ScraperApp {
 
         
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex + 1
-        scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 1
-        scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageIndexSection = 1
+        scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = 0
+        scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageIndexSection = 0
 
         if (scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex > scraperTuple.urlSectionExtractorScraper.scrapingIndex.startingUrls.length - 1) {
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex = 0
