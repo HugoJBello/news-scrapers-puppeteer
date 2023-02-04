@@ -144,7 +144,7 @@ export class ElHeraldoSoriaContentScraper extends ContentScraper {
                     let textPar = await this.page.evaluate(element => element.textContent, cap);
                     figuresText.push(textPar)
                 } catch (e) {
-                    console.log(e)
+                    //console.log(e)
                     figuresText.push("")
                 }
             }
