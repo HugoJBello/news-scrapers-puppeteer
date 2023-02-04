@@ -16,6 +16,7 @@ export interface ScrapingIndexI {
     scraperId: string;
     deviceId: string;
     logoUrl: string;
+    tag: string;
     id:number;
     scrapingIteration:number;
 }

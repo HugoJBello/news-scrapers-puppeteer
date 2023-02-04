@@ -23,6 +23,8 @@ import { ElPaisContentScraper } from './scrapers/ElPaisContentScraper';
 import { ElPaisIndexScraper } from './scrapers/ElPaisIndexScraper';
 import { ElMundoContentScraper } from './scrapers/ElMundoContentScraper';
 import { ElMundoIndexScraper } from './scrapers/ElMundoIndexScraper';
+import { ElHeraldoSoriaContentScraper } from './scrapers/ElHeraldoSoriaContentScraper';
+import { ElHeraldoSoriaIndexScraper } from './scrapers/ElHeraldoSoriaIndexScraper';
   
  
 require('dotenv').config();
@@ -53,39 +55,40 @@ export default class ScraperApp {
         for (let newspaper of newspapersReordered) {
             console.log("loading index for " + newspaper)
             
+            const indexScraper = await this.prepareIndex(newspaper)
+            console.log(indexScraper)
+
+            let scraper = null
+
+            if (newspaper === "elheraldosoria") {
+                scraper = {
+                    pageScraper: new ElHeraldoSoriaContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new ElHeraldoSoriaIndexScraper(indexScraper)
+                } as ScraperTuple
+            }
+
             if (newspaper === "publico") {
-                const indexScraper = await this.prepareIndex(newspaper)
-                console.log(indexScraper)
-                const scraper = {
+                scraper = {
                     pageScraper: new PublicoContentScraper(indexScraper.scraperId, indexScraper.newspaper),
                     urlSectionExtractorScraper: new PublicoIndexScraper(indexScraper)
                 } as ScraperTuple
-                this.scrapers.push(scraper)
             }
 
             if (newspaper === "eldiario.es") {
-                const indexScraper = await this.prepareIndex(newspaper)
-                console.log(indexScraper)
-                const scraper = {
+                scraper = {
                     pageScraper: new ElDiarioesContentScraper(indexScraper.scraperId, indexScraper.newspaper),
                     urlSectionExtractorScraper: new ElDiarioesIndexScraper(indexScraper)
                 } as ScraperTuple
-                this.scrapers.push(scraper)
             }
 
             if (newspaper === "elpais") {
-                const indexScraper = await this.prepareIndex(newspaper)
-                console.log(indexScraper)
-                const scraper = {
+                scraper = {
                     pageScraper: new ElPaisContentScraper(indexScraper.scraperId, indexScraper.newspaper),
                     urlSectionExtractorScraper: new ElPaisIndexScraper(indexScraper)
                 } as ScraperTuple
-                this.scrapers.push(scraper)
             }
             if (newspaper === "elmundo") {
-                const indexScraper = await this.prepareIndex(newspaper)
-                console.log(indexScraper)
-                const scraper = {
+                scraper = {
                     pageScraper: new ElMundoContentScraper(indexScraper.scraperId, indexScraper.newspaper),
                     urlSectionExtractorScraper: new ElMundoIndexScraper(indexScraper)
                 } as ScraperTuple
@@ -93,9 +96,7 @@ export default class ScraperApp {
             }
 
             if (newspaper === "guardianus") {
-                const indexScraper = await this.prepareIndex(newspaper)
-                console.log(indexScraper)
-                const scraper = {
+                scraper = {
                     pageScraper: new GuardianNewContentScraper(indexScraper.scraperId, indexScraper.newspaper),
                     urlSectionExtractorScraper: new GuardianNewIndexScraper(indexScraper)
                 } as ScraperTuple
@@ -103,14 +104,14 @@ export default class ScraperApp {
             }
 
             if (newspaper === "newyorktimes") {
-                const indexScraper = await this.prepareIndex(newspaper)
-                console.log(indexScraper)
-                const scraper = {
+                scraper = {
                     pageScraper: new NewYorkTimesContentScraper(indexScraper.scraperId, indexScraper.newspaper),
                     urlSectionExtractorScraper: new NewYorkTimesIndexScraper(indexScraper)
                 } as ScraperTuple
-                this.scrapers.push(scraper)
             }
+
+            this.scrapers.push(scraper)
+
 
         }
 
@@ -178,6 +179,7 @@ export default class ScraperApp {
         indexScraper.newspaper = newspaper
         indexScraper.scraperId = this.config.scraperId
         indexScraper.deviceId = this.config.deviceId
+        indexScraper.tag = this.config.scrapingSettings[newspaper].tag
         indexScraper.maxPages = this.config.scrapingSettings[newspaper].maxPages
         indexScraper.logoUrl =  this.config.scrapingSettings[newspaper].logoUrl
                

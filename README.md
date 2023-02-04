@@ -10,6 +10,7 @@ run single test using it(..) handle:
     npm test -- --grep "ElDiarioesContentScraper"
     npm test -- --grep "PublicoContentScraper"
     npm test -- --grep "ElMundoContentScraper"
+    npm test -- --grep "ElHeraldoSoriaContentScraper"
 
 
     npm test -- --grep "ElDiarioesIndexScraper"
@@ -17,3 +18,4 @@ run single test using it(..) handle:
     npm test -- --grep "PublicoIndexScraper"
     npm test -- --grep "GuardianIndexScraper"    
     npm test -- --grep "NewYorkTimesIndexScraper"
+    npm test -- --grep "ElHeraldoSoriaIndexScraper"
