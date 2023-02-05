@@ -15,7 +15,7 @@ describe('ElHeraldoSoriaContentScraper 1', function () {
 
         it('ElHeraldoSoriaContentScraper', async function () {
 
-            const url = "https://heraldodiariodesoria.elmundo.es/articulo/deportes/balonmano-soria-resiste-gijon-lograr-empate-sabor-play-off/20230204192816353808.html"
+            const url = "https://heraldodiariodesoria.elmundo.es/articulo/deportes/ridiculo-numancia-derrota-colista-1/20230205201701354004.html"
             
             const result = await scraper.extractNewInUrl(url, "", 0, 0);
             console.log(result);
