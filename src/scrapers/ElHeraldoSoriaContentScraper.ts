@@ -7,7 +7,7 @@ export class ElHeraldoSoriaContentScraper extends ContentScraper {
     public newspaper: string
     public scraperId: string
     public excludedParagraphsEqual: string[] = [' ', '  ', ' \n', '  \n']
-    public excludedParagraphsIncluding: string[] = []
+    public excludedParagraphsIncluding: string[] = ['Su privacidad es importante para nosotros']
     public mustStartWith = "https://heraldodiariodesoria.elmundo.es"
 
     constructor(scraperId: string, newspaper: string) {

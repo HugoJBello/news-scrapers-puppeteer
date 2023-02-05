@@ -25,6 +25,8 @@ import { ElMundoContentScraper } from './scrapers/ElMundoContentScraper';
 import { ElMundoIndexScraper } from './scrapers/ElMundoIndexScraper';
 import { ElHeraldoSoriaContentScraper } from './scrapers/ElHeraldoSoriaContentScraper';
 import { ElHeraldoSoriaIndexScraper } from './scrapers/ElHeraldoSoriaIndexScraper';
+import { LaVanguardiaContentScraper } from './scrapers/LaVanguardiaContentScraper';
+import { LaVanguardiaIndexScraper } from './scrapers/LaVanguardiaIndexScraper';
   
  
 require('dotenv').config();
@@ -59,6 +61,13 @@ export default class ScraperApp {
             console.log(indexScraper)
 
             let scraper = null
+
+            if (newspaper === "lavanguardia") {
+                scraper = {
+                    pageScraper: new LaVanguardiaContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new LaVanguardiaIndexScraper(indexScraper)
+                } as ScraperTuple
+            }
 
             if (newspaper === "elheraldosoria") {
                 scraper = {

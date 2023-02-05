@@ -3,12 +3,12 @@ import {ContentScraper} from "./ContentScraper";
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 
 
-export class ElPaisContentScraper extends ContentScraper {
+export class LaVanguardiaContentScraper extends ContentScraper {
     public newspaper: string
     public scraperId: string
     public excludedParagraphsEqual: string[] = [' ', '  ', ' \n', '  \n']
-    public excludedParagraphsIncluding: string[] = ['With your agreement','We and our partners do the following data processing']
-    public mustStartWith = "https://elpais.com/"
+    public excludedParagraphsIncluding: string[] = []
+    public mustStartWith = "https://www.lavanguardia.com"
 
     constructor(scraperId: string, newspaper: string) {
         super();
@@ -23,7 +23,7 @@ export class ElPaisContentScraper extends ContentScraper {
         return false
     }
     async extractNewInUrl(url: string, scrapingId:string, newsIndex:number, scrapingIteration: number): Promise<NewScrapedI> {
-        // https://elpais.com/internacional/2023-01-20/alemania-se-resiste-a-enviar-tanques-leopard-a-ucrania-pese-a-la-presion-de-los-aliados.html
+        // https://www.lavanguardia.com/politica/20230205/8734503/feijoo-insinua-gana-elecciones-dejara-presidente-pp.html
         console.log("\n---");
         console.log("extracting full new in url:")
         console.log(url);
@@ -49,23 +49,23 @@ export class ElPaisContentScraper extends ContentScraper {
                 return {} as NewScrapedI
             }
 
-            const div = await this.page.$('article');
+            const div = await this.page.$('div.article-modules');
             const [headline, content,contentMarkdown, date, author, image, tags, sections, description] = await Promise.all([this.extractHeadline(), this.extractBody(div),this.extractBodyMarkdown(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractSections(), this.extractDescription()])
-            const {figuresUrl, figuresText} = await this.extractFigures()
+            
+            const {figuresUrl, figuresText} = await this.extractFigures(div)
 
             await this.browser.close();
-
             let results = {
                 url,
                 content,
                 contentMarkdown,
-                figuresUrl,
-                figuresText,
                 headline,
                 tags,
                 sections,
                 date,
                 image,
+                figuresUrl, 
+                figuresText,
                 author,
                 description,
                 scraperId: this.scraperId,
@@ -87,7 +87,7 @@ export class ElPaisContentScraper extends ContentScraper {
     async extractBody(div: any) {
         try {
             //const pars = await this.page.$$("div#maincontent")
-            const pars = await this.page.$$("p")
+            const pars = await div.$$("p")
             let text = ''
             for (let par of pars) {
                 let textPar = await this.page.evaluate(element => element.textContent, par);
@@ -108,9 +108,54 @@ export class ElPaisContentScraper extends ContentScraper {
 
     }
 
+
+
+    async extractFigures(main: any):Promise<any> {
+        let figuresUrl:string[] = []
+        let figuresText:string[] = []
+
+        let figs = await this.page.$$("figure")
+        //const pics = await main.$$("picture")
+
+        //figs = figs.concat(pics)
+
+        for (let fig of figs){
+            const img = await fig.$("picture > img")
+            const imgSolo = await fig.$("div > picture > img")
+            const cap = await fig.$("figcaption > p")
+            
+            try {
+                let src = null
+                if (img){
+                    src = await img.getProperty('src');
+                } else if (imgSolo){
+                    src = await imgSolo.getProperty('src');
+                }
+                //const pars = await this.page.$$("div#maincontent")
+                const image = await src.jsonValue();
+                figuresUrl.push(image as string)
+                
+            } catch (e) {
+            }
+
+            if (img || imgSolo){
+                try {
+                    //const pars = await this.page.$$("div#maincontent")
+                    let textPar = await this.page.evaluate(element => element.textContent, cap);
+                    figuresText.push(textPar)
+                } catch (e) {
+                    figuresText.push("")
+                }
+            }
+            
+    }
+        return {figuresUrl, figuresText}
+    }
+
+
     async extractBodyMarkdown(div: any) {
         try {
-            const pars = await this.page.$$("p, h3, h2")
+            const pars = await div.$$("p, h3, h2")
             let text = ''
             for (let par of pars) {
                 let tagName = await (await par.getProperty('tagName')).jsonValue()
@@ -141,45 +186,13 @@ export class ElPaisContentScraper extends ContentScraper {
     }
 
 
-    async extractFigures():Promise<any> {
-        let figuresUrl:string[] = []
-        let figuresText:string[] = []
-
-        const figs = await this.page.$$("figure")
-        for (let fig of figs){
-            const img = await fig.$("span > img")
-            const cap = await fig.$("figcaption > span")
-
-            try {
-                //const pars = await this.page.$$("div#maincontent")
-                const src = await img.getProperty('src');
-                const image = await src.jsonValue();
-                figuresUrl.push(image as string)
-                
-            } catch (e) {
-            }
-
-            if (img){
-                try {
-                    //const pars = await this.page.$$("div#maincontent")
-                    let textPar = await this.page.evaluate(element => element.textContent, cap);
-                    figuresText.push(textPar)
-                } catch (e) {
-                    figuresText.push("")
-                }
-            }
-            
-    }
-        return {figuresUrl, figuresText}
-    }
-
     cleanUp = (text: string) => {
         return text.replace(/\n/g, " ")
     }
 
     async extractDate(): Promise<Date> {
         try {
-            let date = await this.page.$eval("head > meta[property='article:published_time']", (element: any) => element.content);
+            let date = await this.page.$eval("head > meta[property='cms_creationDate']", (element: any) => element.content);
             date = new Date(date)
             return date
         } catch (e) {
@@ -211,7 +224,6 @@ export class ElPaisContentScraper extends ContentScraper {
     }
 
 
-
     async extractSections(): Promise<string[]> {
         try {
             let sections = await this.page.$eval("head > meta[property='article:section']", (element: any) => element.content);
@@ -238,7 +250,7 @@ export class ElPaisContentScraper extends ContentScraper {
 
     async extractAuthor() {
         try {
-            let headline = await this.page.$eval("head > meta[property='og:article:author']", (element: any) => element.content);
+            let headline = await this.page.$eval("head > meta[property='cms_creator']", (element: any) => element.content);
             return headline
         } catch (e) {
             return null
