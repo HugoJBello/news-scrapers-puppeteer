@@ -31,8 +31,10 @@ export class PuppeteerScraper {
         this.browser = await puppeteer.launch({
             headless: true,
             ignoreHTTPSErrors: true,
+            executablePath: '/usr/bin/google-chrome',
             slowMo: 0,
             args: ['--window-size=1400,900',
+                "--no-sandbox",
                 '--remote-debugging-port=9222',
                 "--remote-debugging-address=0.0.0.0", // You know what your doing?
                 '--disable-gpu', "--disable-features=IsolateOrigins,site-per-process", '--blink-settings=imagesEnabled=false']

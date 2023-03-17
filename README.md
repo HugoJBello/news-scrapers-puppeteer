@@ -1,8 +1,15 @@
 # News scraper
 # 
 
+docker build . -t news-scraper
+docker stop -t news-scraper
+
+docker run -d --name  news-scraper --restart always --network=host news-scraper
+docker logs --follow news-scraper
 
 
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
 
 run single test using it(..) handle:
     npm test -- --grep "NewYorkTimesContentScraper"
