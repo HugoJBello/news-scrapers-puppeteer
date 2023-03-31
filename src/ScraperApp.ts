@@ -27,6 +27,8 @@ import { ElHeraldoSoriaContentScraper } from './scrapers/ElHeraldoSoriaContentSc
 import { ElHeraldoSoriaIndexScraper } from './scrapers/ElHeraldoSoriaIndexScraper';
 import { LaVanguardiaContentScraper } from './scrapers/LaVanguardiaContentScraper';
 import { LaVanguardiaIndexScraper } from './scrapers/LaVanguardiaIndexScraper';
+import { ScienceNewsIndexScraper } from './scrapers/ScienceNewsIndexScraper';
+import { ScienceNewsContentScraper } from './scrapers/ScienceNewsContentScraper';
   
  
 require('dotenv').config();
@@ -108,6 +110,13 @@ export default class ScraperApp {
                 scraper = {
                     pageScraper: new GuardianNewContentScraper(indexScraper.scraperId, indexScraper.newspaper),
                     urlSectionExtractorScraper: new GuardianNewIndexScraper(indexScraper)
+                } as ScraperTuple
+                this.scrapers.push(scraper)
+            }
+            if (newspaper === "sciencenews") {
+                scraper = {
+                    pageScraper: new ScienceNewsContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new ScienceNewsIndexScraper(indexScraper)
                 } as ScraperTuple
                 this.scrapers.push(scraper)
             }
