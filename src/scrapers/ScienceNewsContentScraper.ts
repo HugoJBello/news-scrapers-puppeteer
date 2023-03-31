@@ -6,7 +6,9 @@ import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
 export class ScienceNewsContentScraper extends ContentScraper {
     public newspaper: string
     public scraperId: string
-    public excludedParagraphs: string[] = [' ', '  ', ' \n', '  \n']
+    public excludedParagraphsEqual: string[] = [' ', '  ', ' \n', '  \n']
+    public excludedParagraphsIncluding: string[] = ['Share this','Get great science journalism', 'Headlines and summaries of the latest Science News articles', 'Subscribe to Science News']
+
     public mustStartWith = "https://www.sciencenews.org/"
 
     constructor(scraperId: string, newspaper: string) {
@@ -89,8 +91,9 @@ export class ScienceNewsContentScraper extends ContentScraper {
             let text = ''
             for (let par of pars) {
                 let textPar = await this.page.evaluate(element => element.textContent, par);
-                const hasExcludedText = this.excludedParagraphs.some((text) => textPar == text)
-                if (!hasExcludedText) {
+                const hasExcludedTextEqual = this.excludedParagraphsEqual.some((text) => textPar===text)
+                const hasExcludedTextIncluded = this.excludedParagraphsIncluding.some((text) => textPar.includes(text))
+                if (!hasExcludedTextEqual && !hasExcludedTextIncluded ) {
                     textPar = textPar.trim()
                     if (textPar !== ""){
                         text = text + '\n' + textPar
@@ -114,8 +117,10 @@ export class ScienceNewsContentScraper extends ContentScraper {
                 tagName = tagName.toLocaleLowerCase()
                 
                 let inner_html = await this.page.evaluate(element => element.innerHTML, par);
-                const hasExcludedText = this.excludedParagraphs.some((text) => inner_html == text)
-                if (!hasExcludedText) {
+                const hasExcludedText = this.excludedParagraphsEqual.some((text) => inner_html == text)
+                const hasExcludedTextIncluded = this.excludedParagraphsIncluding.some((text) => inner_html.includes(text))
+
+                if (!hasExcludedText && !hasExcludedTextIncluded ) {
                     let markdownText = NodeHtmlMarkdown.translate(inner_html).trim()
                     
                     if (markdownText.trim() !== "" && (tagName === "h1" || tagName === "h2" || tagName === "h3")){

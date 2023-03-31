@@ -7,16 +7,7 @@
   "useSqliteDb": true,
   "useMongoDb": false,
   "newspapers": [
-    "elpais",
-    "elmundo",
-    "eldiario.es",
-    "publico",
-    "lavanguardia",
-    "elheraldosoria",
-    "guardianus",
-    "sciencenews",
-    "newyorktimes"
-    ],
+    "sciencenews"    ],
   "scrapingSettings": {
     "lavanguardia": {
       "maxPages": 1,
