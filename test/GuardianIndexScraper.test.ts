@@ -7,10 +7,11 @@ require('dotenv').config();
 
 describe('GuardianIndexScraper 1', function () {
     describe('GuardianIndexScraper 2', function () {
+        this.timeout(9999999);
 
         const date = new Date()
         const testIndex = {urlIndex:1, pageNewIndex:2, startingUrls:
-                ["https://www.theguardian.com/",]
+                ["https://www.theguardian.com/international",]
         } as ScrapingIndexI
 
         const scraper = new GuardianNewIndexScraper(testIndex);
@@ -24,6 +25,7 @@ describe('GuardianIndexScraper 1', function () {
             console.log(result);
             console.log(scraper.scrapingIndex);
             expect(result).not.to.equal(undefined)
+            expect(result.length).not.to.equal(0)
             expect(scraper.scrapingIndex.pageNewIndex).to.equal(2)
         });
     });

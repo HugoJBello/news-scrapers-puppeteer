@@ -78,7 +78,7 @@ export class GuardianNewIndexScraper extends IndexScraper {
 
 
     async extractUrlsFromPage(): Promise<string[]>{
-        let hrefs = await this.page.$$('div.fc-item__container>a')
+        let hrefs = await this.page.$$('li>div>a')
         const urls = []
         for (const hrefv of hrefs){
             let url = await this.page.evaluate((a:any) => a.href, hrefv);

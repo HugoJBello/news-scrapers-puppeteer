@@ -8,7 +8,7 @@ export class ElHeraldoSoriaContentScraper extends ContentScraper {
     public scraperId: string
     public excludedParagraphsEqual: string[] = [' ', '  ', ' \n', '  \n']
     public excludedParagraphsIncluding: string[] = ['Su privacidad es importante para nosotros']
-    public mustStartWith = "https://heraldodiariodesoria.elmundo.es"
+    public mustStartWith = "https://www.heraldodiariodesoria.es"
 
     constructor(scraperId: string, newspaper: string) {
         super();
@@ -23,7 +23,7 @@ export class ElHeraldoSoriaContentScraper extends ContentScraper {
         return false
     }
     async extractNewInUrl(url: string, scrapingId: string, newsIndex: number, scrapingIteration: number): Promise<NewScrapedI> {
-        // https://heraldodiariodesoria.elmundo.es/articulo/soria/vino-soria-98-puntos-parker-que-cuesta-830-euros-botella/20230203221410353773.html
+        //https://www.heraldodiariodesoria.es/soria/230825/154927/joven-desnuda-pasea-soria-dia-banarse-ropa-fuentes.html
         console.log("\n---");
         console.log("extracting full new in url:")
         console.log(url);
@@ -199,8 +199,9 @@ export class ElHeraldoSoriaContentScraper extends ContentScraper {
 
     async extractDate(url: string): Promise<Date> {
         //20230204121936353779
-        const splitted = url.split("/")[url.split("/").length - 1]
-        const date = splitted.slice(0, 4) + "-" + splitted.slice(4, 6) + "-" + splitted.slice(6, 8)
+        const splitted = url.split("/")[url.split("/").length - 3]
+        console.log(splitted)
+        const date = "20"+ splitted.slice(0, 2) + "-" + splitted.slice(2, 4) + "-" + splitted.slice(4, 6)
         return new Date(date)
     }
 

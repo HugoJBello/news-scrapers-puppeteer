@@ -7,7 +7,7 @@ export class ElHeraldoSoriaIndexScraper extends IndexScraper {
     public scrapingIndex: ScrapingIndexI
     public urls:string[] = []
     public urlPrefixes:string[] = []
-    public mustStartWith = "https://heraldodiariodesoria.elmundo.es/"
+    public mustStartWith = "https://www.heraldodiariodesoria.es/"
 
     constructor(scrapingIndex: ScrapingIndexI) {
         super();
@@ -93,11 +93,13 @@ export class ElHeraldoSoriaIndexScraper extends IndexScraper {
             urls.push(url)
         }
  
-        const date_regex = /(\d{20})/
-        //2023/01/20.html
+        const date_regex = /.html$/
 
+        //2023/01/20.html
+        console.log(urls)
         return urls.filter((href: string) => {
-            return date_regex.test(href) && this.checkCorrectUrl(href)
+            //return date_regex.test(href) && this.checkCorrectUrl(href)
+            return this.checkCorrectUrl(href)
         })
     }
 

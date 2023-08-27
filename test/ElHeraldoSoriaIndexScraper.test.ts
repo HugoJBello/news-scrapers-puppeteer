@@ -11,7 +11,7 @@ describe('ElHeraldoSoriaIndexScraper 1', function () {
 
         const date = new Date()
         const testIndex = {urlIndex:1, pageNewIndex:2, startingUrls:
-                ["https://heraldodiariodesoria.elmundo.es/",]
+                ["https://www.heraldodiariodesoria.es/",]
         } as ScrapingIndexI
 
         const scraper = new ElHeraldoSoriaIndexScraper(testIndex);
@@ -25,6 +25,7 @@ describe('ElHeraldoSoriaIndexScraper 1', function () {
             console.log(result);
             console.log(scraper.scrapingIndex);
             expect(result).not.to.equal(undefined)
+            expect(result.length).not.to.equal(0)
             expect(scraper.scrapingIndex.pageNewIndex).to.greaterThan(0)
         });
     });
