@@ -7,7 +7,7 @@ export class ElHeraldoSoriaContentScraper extends ContentScraper {
     public newspaper: string
     public scraperId: string
     public excludedParagraphsEqual: string[] = [' ', '  ', ' \n', '  \n']
-    public excludedParagraphsIncluding: string[] = ['Su privacidad es importante para nosotros']
+    public excludedParagraphsIncluding: string[] = ['Su privacidad es importante para nosotros', 'With your agreement', 'We and our partners', 'ES NOTICIA']
     public mustStartWith = "https://www.heraldodiariodesoria.es"
 
     constructor(scraperId: string, newspaper: string) {
@@ -115,31 +115,29 @@ export class ElHeraldoSoriaContentScraper extends ContentScraper {
         let figuresText: string[] = []
 
         try {
-            let figs = await main.$$("figure")
+            let figs = await this.page.$$("figure")
             //const pics = await main.$$("picture")
 
             //figs = figs.concat(pics)
 
             for (let fig of figs) {
-                const img = await fig.$("div > figure > img")
                 const imgSolo = await fig.$("div > picture > img")
                 const cap = await fig.$("figcaption")
 
                 try {
                     let src = null
-                    if (img) {
-                        src = await img.getProperty('src');
-                    } else if (imgSolo) {
+
+                    if (imgSolo) {
                         src = await imgSolo.getProperty('src');
                     }
                     //const pars = await this.page.$$("div#maincontent")
                     const image = await src.jsonValue();
                     figuresUrl.push(image as string)
-
                 } catch (e) {
+                    console.log(e)
                 }
 
-                if (img || imgSolo) {
+                if (imgSolo) {
                     try {
                         //const pars = await this.page.$$("div#maincontent")
                         let textPar = await this.page.evaluate(element => element.textContent, cap);
