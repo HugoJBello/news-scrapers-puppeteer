@@ -2,7 +2,7 @@
   "scraperId": "gokuScraper",
   "deviceId": "goku departamento",
   "appId": "deviceTestApp",
-  "apiUrl":"http://localhost:3000",
+  "apiUrl":"http://localhost:3000/news",
   "apiUrl2":"https://walrus-app-kitxm.ondigitalocean.app/news-scraper-api2",
   "useSqliteDb": true,
   "useMongoDb": false,
