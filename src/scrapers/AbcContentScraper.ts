@@ -3,12 +3,13 @@ import {ContentScraper} from "./ContentScraper";
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 
 
-export class ElMundoContentScraper extends ContentScraper {
+export class AbcContentScraper extends ContentScraper {
     public newspaper: string
     public scraperId: string
-    public excludedParagraphsEqual: string[] = [' ', '  ', ' \n', '  \n']
-    public excludedParagraphsIncluding: string[] = ['Suscríbete 50% Dto.', 'With your consent,','Gracias por elegir EL MUNDO','We and our partners do the following data processing']
-    public mustStartWith = "https://www.elmundo.es/"
+    public excludedParagraphsEqual: string[] = [' ', '  ', ' \n', '  \n',  'Facebook\n', 'Twitter\n', 'Email\n',]
+    public excludedParagraphsIncluding: string[] = ['Esta funcionalidad es sólo para registrados', 'Facebook\n', 'Whatsapp\n', 'Twitter\n', 'Email\n',
+    "Esta funcionalidad es sólo para suscriptores"]
+    public mustStartWith = "https://www.abc.es/"
 
     constructor(scraperId: string, newspaper: string) {
         super();
@@ -23,7 +24,7 @@ export class ElMundoContentScraper extends ContentScraper {
         return false
     }
     async extractNewInUrl(url: string, scrapingId:string, newsIndex:number, scrapingIteration: number): Promise<NewScrapedI> {
-        // https://www.elmundo.es/internacional/2023/01/20/63ca8e72fc6c8370628b4589.html
+        // https://elpais.com/internacional/2023-01-20/alemania-se-resiste-a-enviar-tanques-leopard-a-ucrania-pese-a-la-presion-de-los-aliados.html
         console.log("\n---");
         console.log("extracting full new in url:")
         console.log(url);
@@ -49,24 +50,23 @@ export class ElMundoContentScraper extends ContentScraper {
                 return {} as NewScrapedI
             }
 
-            //data-section="articleBody"
-            const div = await this.page.$('div[data-section="articleBody"');
+            const div = await this.page.$('article');
             const [headline, content,contentMarkdown, date, author, image, tags, sections, description] = await Promise.all([this.extractHeadline(), this.extractBody(div),this.extractBodyMarkdown(div), this.extractDate(), this.extractAuthor(), this.extractImage(), this.extractTags(), this.extractSections(), this.extractDescription()])
-            
-            const {figuresUrl, figuresText} = await this.extractFigures(div)
+            const {figuresUrl, figuresText} = await this.extractFigures()
 
             await this.browser.close();
+
             let results = {
                 url,
                 content,
                 contentMarkdown,
+                figuresUrl,
+                figuresText,
                 headline,
                 tags,
                 sections,
                 date,
                 image,
-                figuresUrl, 
-                figuresText,
                 author,
                 description,
                 scraperId: this.scraperId,
@@ -88,11 +88,11 @@ export class ElMundoContentScraper extends ContentScraper {
     async extractBody(div: any) {
         try {
             //const pars = await this.page.$$("div#maincontent")
-            const pars = await div.$$("p")
+            const pars = await div.$$("p.voc-p")
             let text = ''
             for (let par of pars) {
                 let textPar = await this.page.evaluate(element => element.textContent, par);
-                const hasExcludedTextEqual = this.excludedParagraphsEqual.some((text) => textPar===text)
+                const hasExcludedTextEqual = this.excludedParagraphsEqual.some((text) => textPar==text)
                 const hasExcludedTextIncluded = this.excludedParagraphsIncluding.some((text) => textPar.includes(text))
                 if (!hasExcludedTextEqual && !hasExcludedTextIncluded ) {
                     textPar = textPar.trim()
@@ -109,55 +109,9 @@ export class ElMundoContentScraper extends ContentScraper {
 
     }
 
-
-
-    async extractFigures(main: any):Promise<any> {
-        let figuresUrl:string[] = []
-        let figuresText:string[] = []
-
-        let figs = await main.$$("figure")
-        //const pics = await main.$$("picture")
-
-        //figs = figs.concat(pics)
-
-        for (let fig of figs){
-            const img = await fig.$("div > div > img")
-            const imgSolo = await fig.$("div > picture > img")
-            const cap = await fig.$("figcaption > span")
-            
-            try {
-                let src = null
-                if (img){
-                    src = await img.getProperty('src');
-                } else if (imgSolo){
-                    src = await imgSolo.getProperty('src');
-                }
-                //const pars = await this.page.$$("div#maincontent")
-                const image = await src.jsonValue();
-                figuresUrl.push(image as string)
-                
-            } catch (e) {
-            }
-
-            if (img || imgSolo){
-                try {
-                    //const pars = await this.page.$$("div#maincontent")
-                    let textPar = await this.page.evaluate(element => element.textContent, cap);
-                    figuresText.push(textPar)
-                } catch (e) {
-                    console.log(e)
-                    figuresText.push("")
-                }
-            }
-            
-    }
-        return {figuresUrl, figuresText}
-    }
-
-
     async extractBodyMarkdown(div: any) {
         try {
-            const pars = await div.$$("p, h3, h2")
+            const pars = await div.$$("p.voc-p, h3, h2")
             let text = ''
             for (let par of pars) {
                 let tagName = await (await par.getProperty('tagName')).jsonValue()
@@ -187,6 +141,38 @@ export class ElMundoContentScraper extends ContentScraper {
 
     }
 
+
+    async extractFigures():Promise<any> {
+        let figuresUrl:string[] = []
+        let figuresText:string[] = []
+
+        const figs = await this.page.$$("figure")
+        for (let fig of figs){
+            const img = await fig.$("div > img")
+            const cap = await fig.$("figcaption > span")
+
+            try {
+                //const pars = await this.page.$$("div#maincontent")
+                const src = await img.getProperty('src');
+                const image = await src.jsonValue();
+                figuresUrl.push(image as string)
+                
+            } catch (e) {
+            }
+
+            if (img){
+                try {
+                    //const pars = await this.page.$$("div#maincontent")
+                    let textPar = await this.page.evaluate(element => element.textContent, cap);
+                    figuresText.push(textPar)
+                } catch (e) {
+                    figuresText.push("")
+                }
+            }
+            
+    }
+        return {figuresUrl, figuresText}
+    }
 
     cleanUp = (text: string) => {
         return text.replace(/\n/g, " ")
@@ -224,6 +210,7 @@ export class ElMundoContentScraper extends ContentScraper {
         }
 
     }
+
 
 
     async extractSections(): Promise<string[]> {

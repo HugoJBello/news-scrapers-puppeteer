@@ -29,7 +29,9 @@ import { LaVanguardiaContentScraper } from './scrapers/LaVanguardiaContentScrape
 import { LaVanguardiaIndexScraper } from './scrapers/LaVanguardiaIndexScraper';
 import { ScienceNewsIndexScraper } from './scrapers/ScienceNewsIndexScraper';
 import { ScienceNewsContentScraper } from './scrapers/ScienceNewsContentScraper';
-  
+import { AbcIndexScraper } from './scrapers/AbcIndexScraper';
+import { AbcContentScraper } from './scrapers/AbcContentScraper';
+
  
 require('dotenv').config();
 
@@ -63,6 +65,13 @@ export default class ScraperApp {
             console.log(indexScraper)
 
             let scraper = null
+
+            if (newspaper === "abc") {
+                scraper = {
+                    pageScraper: new AbcContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new AbcIndexScraper(indexScraper)
+                } as ScraperTuple
+            }
 
             if (newspaper === "lavanguardia") {
                 scraper = {
