@@ -31,6 +31,7 @@ export default class ApiManager {
             await axios.post(url, newScraped)
         } catch (e){
             console.log("error saving news scraped in api")
+            throw e
         }
     }
 
@@ -40,7 +41,7 @@ export default class ApiManager {
             await axios.post(url, index)
         } catch (e){
             console.log("error saving news scrapingIndex in api")
-
+            throw e
         }
     }
 
@@ -50,7 +51,7 @@ export default class ApiManager {
             await axios.post(url, config)
         } catch (e){
             console.log("error saving news globalConfig in api")
-
+            throw e
         }
     }
 
