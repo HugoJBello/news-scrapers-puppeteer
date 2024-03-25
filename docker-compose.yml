@@ -5,5 +5,6 @@ services:
     build:
       context: ./
     image: scraper
+    network_mode: host
     volumes:
     - ./database_news.sqlite3:/database_news.sqlite3
