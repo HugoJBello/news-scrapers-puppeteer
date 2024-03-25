@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  scraper:
+    container_name: scraper
+    build:
+      context: ./
+    image: scraper
+    volumes:
+    - ./database_news.sqlite3:/database_news.sqlite3
