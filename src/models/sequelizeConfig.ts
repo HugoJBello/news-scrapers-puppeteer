@@ -9,8 +9,10 @@ import {
 import {scrapingUrlSqlAttributes, ScrapingUrlsSql} from "./ScrapingUrlSql";
 import {GlobalConfigSql, globalConfigSqlAttributes} from "./GlobalConfigSql";
 
+const timestamp = new Date().valueOf()
+
 export const sequelize =  new Sequelize({
-    storage: './database_news.sqlite3',
+    storage: './db/database_news' + timestamp + '.sqlite3',
     dialect: 'sqlite',
     logging: false
 })
