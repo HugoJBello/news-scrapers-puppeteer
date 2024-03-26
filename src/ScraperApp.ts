@@ -330,6 +330,7 @@ export default class ScraperApp {
         }
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration = scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration + 1
         this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
+        this.globalConfig.lastLog = "completed " + scraperTuple.pageScraper.newspaper
         await this.persistenceManager.updateGlobalConfig(this.globalConfig)
         await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
     }
