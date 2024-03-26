@@ -23,6 +23,7 @@ run single test using it(..) handle:
  
 
     npm test -- --grep "ElDiarioesIndexScraper"
+    npm test -- --grep "ElMundoIndexScraper"
     npm test -- --grep "ElPaisIndexScraper"
     npm test -- --grep "PublicoIndexScraper"
     npm test -- --grep "GuardianIndexScraper"    

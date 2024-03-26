@@ -31,7 +31,7 @@ import { ScienceNewsIndexScraper } from './scrapers/ScienceNewsIndexScraper';
 import { ScienceNewsContentScraper } from './scrapers/ScienceNewsContentScraper';
 import { AbcIndexScraper } from './scrapers/AbcIndexScraper';
 import { AbcContentScraper } from './scrapers/AbcContentScraper';
-
+import {ScrapingConfigI} from './models/ScrapingConfig'
  
 require('dotenv').config();
 
@@ -42,7 +42,7 @@ export interface ScraperTuple {
 }
 
 export default class ScraperApp {
-    public config: any = scrapingConfig as any
+    public config: ScrapingConfigI = scrapingConfig as any
 
     public scrapers: ScraperTuple[] = [];
     public joiningStr = "===="
@@ -162,6 +162,7 @@ export default class ScraperApp {
             globalConfig.lastActive = new Date()
             globalConfig.activeSince = globalConfig.lastActive
             globalConfig.createdAt = globalConfig.lastActive
+            globalConfig.globalIteration = 0
             this.globalConfig = globalConfig
             await this.persistenceManager.updateGlobalConfig(globalConfig)
         }
@@ -228,8 +229,35 @@ export default class ScraperApp {
                 console.log(e)
                 console.log("----------------------------------")
             }
+            await this.waitIfLast(scraperTuple)
+
         }
     }
+    
+    async waitIfLast(scraperTuple: ScraperTuple) {
+        const iteration = this.globalConfig.globalIteration
+        const waitMinutes = this.config.waitMinutes
+        const waitOnIteration = this.config.waitOnIteration
+
+        if (waitMinutes != 0 && waitOnIteration != 0) {
+            const itemInRound = (iteration+1) % waitOnIteration 
+            if (itemInRound == 0) {
+                console.log("----------------------------------")
+                console.log("Waiting ", waitMinutes, " minutes")
+                console.log("----------------------------------")
+                await this.wait(waitMinutes * 60 * 1000)
+            }
+        } else {
+            console.log("not waiting this time. Iteration ", iteration, ". Waiting for a multiple of ", waitOnIteration)
+        }
+    }
+
+    async wait(delay: number) {
+        return new Promise(function(resolve) {
+            setTimeout(resolve, delay);
+        });
+    }
+ 
 
     async scrapOneIterationFromOneScraper(scraperTuple: ScraperTuple) {
         await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
@@ -239,6 +267,7 @@ export default class ScraperApp {
 
 
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingUrlList = urls
+        scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewTotal = urls.length
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.currentScrapingIdList = ids
         
         console.log("--->  starting scraping urls ")
@@ -293,6 +322,8 @@ export default class ScraperApp {
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.urlIndex = 0
         }
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration = scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration + 1
+        this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
+        await this.persistenceManager.updateGlobalConfig(this.globalConfig)
         await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
     }
 

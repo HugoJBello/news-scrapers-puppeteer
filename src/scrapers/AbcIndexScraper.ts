@@ -84,9 +84,12 @@ export class AbcIndexScraper extends IndexScraper {
     }
 
     async extractUrlsFromPage(): Promise<string[]>{
-        console.log("--->")
-        await this.page.click('button>span');
-        console.log("<---")
+        try{
+            await this.page.click('button>span');
+        } catch (e) {
+            
+        }
+ 
 
         let hrefs = await this.page.$$('a')
         const urls = []

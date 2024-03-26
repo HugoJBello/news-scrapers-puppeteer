@@ -2,21 +2,22 @@
   "scraperId": "gokuScraper",
   "deviceId": "goku departamento",
   "appId": "deviceTestApp",
-  "apiUrl":"http://localhost:3001/news",
-  "apiUrl2":"https://walrus-app-kitxm.ondigitalocean.app/news-scraper-api2",
+  "apiUrl":"https://fistular-olm-5800.dataplicity.io/news",
+  "waitOnIteration": 2,
+  "waitMinutes": 60,
   "useSqliteDb": true,
   "useMongoDb": false,
   "newspapers": [
+    "elmundo",
     "abc",
     "elpais",
-    "elmundo",
     "eldiario.es",
-    "publico",
     "lavanguardia",
     "elheraldosoria",
     "guardianus",
     "sciencenews",
-    "newyorktimes"
+    "newyorktimes",
+    "publico"
     ],
   "scrapingSettings": {
     "abc":{

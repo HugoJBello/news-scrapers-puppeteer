@@ -5,6 +5,7 @@ export interface GlobalConfigSqlSqlI {
     createdAt: Date;
     activeSince: Date;
     scraperId: string;
+    globalIteration: number;
     lastNewspaper: string;
     deviceId: string;
     id: number;
@@ -27,6 +28,9 @@ export const globalConfigSqlAttributes = {
     },
     scraperId: {
         type: DataTypes.STRING,
+    },
+    globalIteration: {
+        type: DataTypes.NUMBER,
     },
     deviceId: {
         type: DataTypes.STRING,

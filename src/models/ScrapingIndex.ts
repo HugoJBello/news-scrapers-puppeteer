@@ -6,6 +6,7 @@ export interface ScrapingIndexI {
     dateScraping: Date;
     urlIndex: number;
     pageNewIndex: number;
+    pageNewTotal: number;
     pageIndexSection: number;
     maxPages: number;
     newspaper: string;

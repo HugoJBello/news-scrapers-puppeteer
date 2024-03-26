@@ -8,7 +8,9 @@ export interface ScrapingConfigI{
     newspapers:string[];
     useSqliteDb: boolean;
     useMongoDb: boolean;
-    scrapingSettings: Map<string, ScrapingSettings>;
+    waitOnIteration: number;
+    waitMinutes: number;
+    scrapingSettings: Map<string, ScrapingSettings> | any;
 
 }
 
@@ -16,4 +18,6 @@ export interface ScrapingSettings{
     maxPages: number;
     startingUrls:string[];
     logoUrl: string;
+    tag: string;
+    
 }
