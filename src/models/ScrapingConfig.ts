@@ -10,6 +10,7 @@ export interface ScrapingConfigI{
     useMongoDb: boolean;
     waitOnIteration: number;
     waitMinutes: number;
+    killAfterWaiting: boolean;
     scrapingSettings: Map<string, ScrapingSettings> | any;
 
 }

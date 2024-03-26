@@ -3,9 +3,10 @@
   "deviceId": "goku departamento",
   "appId": "deviceTestApp",
   "apiUrl":"https://fistular-olm-5800.dataplicity.io/news",
-  "waitOnIteration": 2,
+  "waitOnIteration": 10,
   "waitMinutes": 60,
   "useSqliteDb": true,
+  "killAfterWaiting": true,
   "useMongoDb": false,
   "newspapers": [
     "elmundo",

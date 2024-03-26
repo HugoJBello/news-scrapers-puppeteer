@@ -246,6 +246,11 @@ export default class ScraperApp {
                 console.log("Waiting ", waitMinutes, " minutes")
                 console.log("----------------------------------")
                 await this.wait(waitMinutes * 60 * 1000)
+                if (this.config.killAfterWaiting) {
+                    this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
+                    await this.persistenceManager.updateGlobalConfig(this.globalConfig)
+                    throw new Error("Stopping after waiting")
+                }
             }
         } else {
             console.log("not waiting this time. Iteration ", iteration, ". Waiting for a multiple of ", waitOnIteration)
