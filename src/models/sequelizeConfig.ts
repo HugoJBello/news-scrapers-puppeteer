@@ -50,8 +50,8 @@ export const initDb = async () => {
         }
     )
 
-    await NewScrapedSql.sync({force: false})
-    await ScrapingIndexSql.sync({force: false})
-    await ScrapingUrlsSql.sync({force: false})
-    await GlobalConfigSql.sync({force: false})
+    await NewScrapedSql.sync({force: false, alter:true})
+    await ScrapingIndexSql.sync({force: false, alter:true})
+    await ScrapingUrlsSql.sync({force: false, alter:true})
+    await GlobalConfigSql.sync({force: false, alter:true})
 }

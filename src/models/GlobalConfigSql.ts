@@ -8,6 +8,7 @@ export interface GlobalConfigSqlSqlI {
     globalIteration: number;
     lastNewspaper: string;
     deviceId: string;
+    lastLog: string;
     id: number;
 }
 
@@ -36,6 +37,9 @@ export const globalConfigSqlAttributes = {
         type: DataTypes.STRING,
     },
     lastNewspaper: {
+        type: DataTypes.STRING,
+    },
+    lastLog: {
         type: DataTypes.STRING,
     }
 }

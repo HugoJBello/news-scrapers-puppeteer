@@ -6,6 +6,7 @@ export interface GlobalConfigI {
     createdAt: Date;
     activeSince: Date;
     scraperId: string;
+    lastLog: string;
     globalIteration: number;
     lastNewspaper: string;
     deviceId: string;
