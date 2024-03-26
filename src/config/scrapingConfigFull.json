@@ -2,7 +2,7 @@
   "scraperId": "gokuScraper",
   "deviceId": "goku departamento",
   "appId": "deviceTestApp",
-  "apiUrl":"https://fistular-olm-5800.dataplicity.io/news",
+  "apiUrl":"http://localhost:3001/news",
   "waitOnIteration": 10,
   "waitMinutes": 60,
   "useSqliteDb": true,
