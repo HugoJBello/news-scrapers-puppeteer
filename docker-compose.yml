@@ -6,5 +6,6 @@ services:
       context: ./
     image: scraper
     network_mode: host
+    restart: always
     volumes:
     - ./database_news.sqlite3:/database_news.sqlite3
