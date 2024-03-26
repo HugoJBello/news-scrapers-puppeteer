@@ -51,6 +51,26 @@ export default class ScraperApp {
     constructor() {
     }
 
+    async startScraper() {
+        await initDb()
+
+        await this.loadIndexAndScrapers()
+        let continueScraping = true;
+
+        while (continueScraping) for (let scraperTuple of this.scrapers) {
+            try {
+                await this.scrapOneIterationFromOneScraper(scraperTuple)
+            } catch (e) {
+                console.log("----------------------------------")
+                console.log("ERROR")
+                console.log(e)
+                console.log("----------------------------------")
+            }
+            await this.waitIfLast()
+
+        }
+    }
+
     async loadIndexAndScrapers() {
 
         this.persistenceManager = new PersistenceManager(this.config)
@@ -214,27 +234,9 @@ export default class ScraperApp {
         return indexScraper
     }
 
-    async startScraper() {
-        await initDb()
 
-        await this.loadIndexAndScrapers()
-        let continueScraping = true;
-
-        while (continueScraping) for (let scraperTuple of this.scrapers) {
-            try {
-                await this.scrapOneIterationFromOneScraper(scraperTuple)
-            } catch (e) {
-                console.log("----------------------------------")
-                console.log("ERROR")
-                console.log(e)
-                console.log("----------------------------------")
-            }
-            await this.waitIfLast(scraperTuple)
-
-        }
-    }
     
-    async waitIfLast(scraperTuple: ScraperTuple) {
+    async waitIfLast() {
         const iteration = this.globalConfig.globalIteration
         const waitMinutes = this.config.waitMinutes
         const waitOnIteration = this.config.waitOnIteration
