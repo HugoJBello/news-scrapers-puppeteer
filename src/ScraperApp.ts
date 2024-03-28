@@ -298,7 +298,7 @@ export default class ScraperApp {
             let message = "scraping from " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.newspaper
             if (url) {
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
-                message = "scraping url " + "page: " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + " of " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.maxPages
+                message = "scraping url " + "page: " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + " of " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewTotal
                 console.log(message)
                 console.log(url)
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
