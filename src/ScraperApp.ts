@@ -248,6 +248,10 @@ export default class ScraperApp {
                 console.log("Waiting ", waitMinutes, " minutes")
                 console.log("----------------------------------")
                 await this.wait(waitMinutes * 60 * 1000)
+
+                this.globalConfig.lastLog = "Waiting for " + waitMinutes + " minutes "
+                await this.persistenceManager.updateGlobalConfig(this.globalConfig)
+
                 if (this.config.killAfterWaiting) {
                     this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
                     await this.persistenceManager.updateGlobalConfig(this.globalConfig)
