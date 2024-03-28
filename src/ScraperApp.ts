@@ -31,6 +31,8 @@ import { ScienceNewsIndexScraper } from './scrapers/ScienceNewsIndexScraper';
 import { ScienceNewsContentScraper } from './scrapers/ScienceNewsContentScraper';
 import { AbcIndexScraper } from './scrapers/AbcIndexScraper';
 import { AbcContentScraper } from './scrapers/AbcContentScraper';
+import { PhysOrgIndexScraper } from './scrapers/PhysOrgIndexScraper';
+import { PhysOrgContentScraper } from './scrapers/PhysOrgContentScraper';
 import {ScrapingConfigI} from './models/ScrapingConfig'
  
 require('dotenv').config();
@@ -157,6 +159,12 @@ export default class ScraperApp {
                 } as ScraperTuple
             }
 
+            if (newspaper === "physorg") {
+                scraper = {
+                    pageScraper: new PhysOrgContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new PhysOrgIndexScraper(indexScraper)
+                } as ScraperTuple
+            }
             this.scrapers.push(scraper)
 
 
