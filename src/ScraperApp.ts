@@ -33,6 +33,8 @@ import { AbcIndexScraper } from './scrapers/AbcIndexScraper';
 import { AbcContentScraper } from './scrapers/AbcContentScraper';
 import { PhysOrgIndexScraper } from './scrapers/PhysOrgIndexScraper';
 import { PhysOrgContentScraper } from './scrapers/PhysOrgContentScraper';
+import { XatakaIndexScraper } from './scrapers/XatakaIndexScraper';
+import { XatakaContentScraper } from './scrapers/XatakaContentScraper';
 import {ScrapingConfigI} from './models/ScrapingConfig'
  
 require('dotenv').config();
@@ -165,6 +167,14 @@ export default class ScraperApp {
                     urlSectionExtractorScraper: new PhysOrgIndexScraper(indexScraper)
                 } as ScraperTuple
             }
+
+            if (newspaper === "xataka") {
+                scraper = {
+                    pageScraper: new XatakaContentScraper(indexScraper.scraperId, indexScraper.newspaper),
+                    urlSectionExtractorScraper: new XatakaIndexScraper(indexScraper)
+                } as ScraperTuple
+            }
+
             this.scrapers.push(scraper)
 
 
