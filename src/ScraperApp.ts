@@ -69,6 +69,11 @@ export default class ScraperApp {
                 console.log("ERROR")
                 console.log(e)
                 console.log("----------------------------------")
+                this.globalConfig.lastLog = "ERROR: " + e
+                await this.persistenceManager.updateGlobalConfig(this.globalConfig)
+                
+                await this.setUpNextIteration(scraperTuple)
+
             }
             await this.waitIfLast()
 
@@ -281,7 +286,9 @@ export default class ScraperApp {
                 }
             }
         } else {
-            console.log("not waiting this time. Iteration ", iteration, ". Waiting for a multiple of ", waitOnIteration)
+            const message = "not waiting this time. Iteration " + iteration + ". Waiting for a multiple of " + waitOnIteration
+            this.globalConfig.lastLog = message
+            await this.persistenceManager.updateGlobalConfig(this.globalConfig)
         }
     }
 

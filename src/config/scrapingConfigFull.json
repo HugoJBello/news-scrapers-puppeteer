@@ -3,7 +3,7 @@
   "deviceId": "goku departamento",
   "appId": "deviceTestApp",
   "apiUrl":"http://localhost:3001/news",
-  "waitOnIteration": 16,
+  "waitOnIteration": 28,
   "waitMinutes": 60,
   "useSqliteDb": true,
   "killAfterWaiting": true,
