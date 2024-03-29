@@ -273,7 +273,11 @@ export default class ScraperApp {
                 if (this.config.killAfterWaiting) {
                     this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
                     await this.persistenceManager.updateGlobalConfig(this.globalConfig)
-                    throw new Error("Stopping after waiting")
+
+                    this.globalConfig.lastLog = "Closing after waiting " + waitMinutes + " minutes "
+                    await this.persistenceManager.updateGlobalConfig(this.globalConfig)
+
+                    process.exit(1);
                 }
             }
         } else {
