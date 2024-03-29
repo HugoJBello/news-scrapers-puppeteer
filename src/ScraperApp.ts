@@ -69,9 +69,9 @@ export default class ScraperApp {
                 console.log("ERROR")
                 console.log(e)
                 console.log("----------------------------------")
-                this.globalConfig.lastLog = "ERROR: " + e
+                this.globalConfig.lastLog = this.globalConfig.lastLog + "\n ERROR: " + e
                 await this.persistenceManager.updateGlobalConfig(this.globalConfig)
-                
+
                 await this.setUpNextIteration(scraperTuple)
 
             }
@@ -272,14 +272,14 @@ export default class ScraperApp {
                 console.log("----------------------------------")
                 await this.wait(waitMinutes * 60 * 1000)
 
-                this.globalConfig.lastLog = "Waiting for " + waitMinutes + " minutes "
+                this.globalConfig.lastLog = this.globalConfig.lastLog + "\n Waiting for " + waitMinutes + " minutes "
                 await this.persistenceManager.updateGlobalConfig(this.globalConfig)
 
                 if (this.config.killAfterWaiting) {
                     this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
                     await this.persistenceManager.updateGlobalConfig(this.globalConfig)
 
-                    this.globalConfig.lastLog = "Closing after waiting " + waitMinutes + " minutes "
+                    this.globalConfig.lastLog = this.globalConfig.lastLog + "\n Closing after waiting " + waitMinutes + " minutes "
                     await this.persistenceManager.updateGlobalConfig(this.globalConfig)
 
                     process.exit(1);
@@ -287,7 +287,7 @@ export default class ScraperApp {
             }
         } else {
             const message = "not waiting this time. Iteration " + iteration + ". Waiting for a multiple of " + waitOnIteration
-            this.globalConfig.lastLog = message
+            this.globalConfig.lastLog = this.globalConfig.lastLog + "\n "+ message
             await this.persistenceManager.updateGlobalConfig(this.globalConfig)
         }
     }
@@ -344,7 +344,7 @@ export default class ScraperApp {
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + 1
             
             await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
-            this.globalConfig.lastLog = message
+            this.globalConfig.lastLog = this.globalConfig.lastLog + "\n " +  message
             await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
         }
 
@@ -365,7 +365,7 @@ export default class ScraperApp {
         }
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration = scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration + 1
         this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
-        this.globalConfig.lastLog = "completed " + scraperTuple.pageScraper.newspaper
+        this.globalConfig.lastLog = this.globalConfig.lastLog + "\n completed " + scraperTuple.pageScraper.newspaper
         await this.persistenceManager.updateGlobalConfig(this.globalConfig)
         await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
     }
