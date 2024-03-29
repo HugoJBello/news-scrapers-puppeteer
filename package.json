@@ -20,7 +20,7 @@
     "@types/user-agents": "^1.0.2",
     "@types/uuid": "^8.3.4",
     "@types/validator": "^13.7.6",
-    "axios": "^0.27.2",
+    "axios": "^1.6.8",
     "dotenv": "^16.0.2",
     "html-to-text": "^8.2.1",
     "lodash": "^4.17.21",
