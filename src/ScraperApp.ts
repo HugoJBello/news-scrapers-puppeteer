@@ -327,7 +327,7 @@ export default class ScraperApp {
             let message = "scraping from " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.newspaper
             if (url) {
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
-                message = "scraping url " + "page: " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + " of " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewTotal
+                message = "scraping url " + "page: " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + " of " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewTotal + " from " + scraperTuple.urlSectionExtractorScraper.scrapingIndex.newspaper 
                 console.log(message)
                 console.log(url)
                 console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
