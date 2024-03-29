@@ -8,6 +8,7 @@
   "useSqliteDb": true,
   "killAfterWaiting": true,
   "useMongoDb": false,
+  "shuffleScrapers":true,
   "newspapers": [
     "elpais",
     "eldiario.es",

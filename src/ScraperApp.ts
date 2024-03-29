@@ -184,9 +184,10 @@ export default class ScraperApp {
 
 
         }
-
         
-
+        if (this.config.shuffleScrapers) {
+            this.shuffleArray(this.scrapers)
+        }
     }
     async prepareGlobalConfig() {
         let globalConfig = await this.persistenceManager.findCurrentGlogalConfig()
@@ -368,6 +369,13 @@ export default class ScraperApp {
         this.globalConfig.lastLog = this.globalConfig.lastLog + "\n completed " + scraperTuple.pageScraper.newspaper
         await this.persistenceManager.updateGlobalConfig(this.globalConfig)
         await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
+    }
+
+    shuffleArray= (array:any) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
     }
 
 

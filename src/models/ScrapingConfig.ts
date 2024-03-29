@@ -7,6 +7,7 @@ export interface ScrapingConfigI{
     deviceId:string;
     newspapers:string[];
     useSqliteDb: boolean;
+    shuffleScrapers: boolean;
     useMongoDb: boolean;
     waitOnIteration: number;
     waitMinutes: number;
