@@ -184,7 +184,7 @@ export default class ScraperApp {
 
 
         }
-        
+
         if (this.config.shuffleScrapers) {
             this.shuffleArray(this.scrapers)
         }
@@ -271,10 +271,11 @@ export default class ScraperApp {
                 console.log("----------------------------------")
                 console.log("Waiting ", waitMinutes, " minutes")
                 console.log("----------------------------------")
-                await this.wait(waitMinutes * 60 * 1000)
 
                 this.globalConfig.lastLog = this.globalConfig.lastLog + "\n Waiting for " + waitMinutes + " minutes "
                 await this.persistenceManager.updateGlobalConfig(this.globalConfig)
+                
+                await this.wait(waitMinutes * 60 * 1000)
 
                 if (this.config.killAfterWaiting) {
                     this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
