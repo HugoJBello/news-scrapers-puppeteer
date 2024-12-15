@@ -16,7 +16,7 @@ describe('ElMundoContentScraper 1', function () {
         it('ElMundoContentScraper', async function () {
 
             //const url = "https://www.elmundo.es/internacional/2023/01/20/63ca8e72fc6c8370628b4589.html"
-            const url = "https://www.elmundo.es/economia/macroeconomia/2023/01/24/63cfb629fdddffb0498b45d2.html"
+            const url = "https://www.elmundo.es/economia/2024/12/15/675dee4cfc6c83eb1b8b4589.html"
             
             const result = await scraper.extractNewInUrl(url, "", 0, 0);
             console.log(result);

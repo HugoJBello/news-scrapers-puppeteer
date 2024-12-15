@@ -148,8 +148,12 @@ export class ElMundoContentScraper extends ContentScraper {
                     console.log(e)
                     figuresText.push("")
                 }
-            }
+            } 
             
+    }
+
+    if (figuresUrl.length == 0) {
+        figuresUrl = [await this.extractImage()]
     }
         return {figuresUrl, figuresText}
     }
