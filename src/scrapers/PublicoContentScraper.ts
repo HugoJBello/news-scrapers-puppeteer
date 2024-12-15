@@ -10,7 +10,7 @@ import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
 export class PublicoContentScraper extends ContentScraper {
     public newspaper: string
     public scraperId: string
-    public excludedParagraphs: string[] = [' ', '  ', ' \n', '  \n']
+    public excludedParagraphs: string[] = ['Nosotros y nuestros socios hacemos el siguiente', 'Síguenos\n', 'Si eres suscriptor, ', 'Público te permite navegación gratuita mediante la aceptación de cookies', 'Esto implicará el uso de navegación con un fin publicitario']
     public mustStartWith = "https://www.publico.es/"
 
     constructor(scraperId: string, newspaper: string) {
@@ -91,11 +91,11 @@ export class PublicoContentScraper extends ContentScraper {
     async extractBody(div: any) {
         try {
             //const pars = await this.page.$$("div#maincontent")
-            const pars = await this.page.$$("p.pb-article-item-iteration")
+            const pars = await this.page.$$("p")
             let text = ''
             for (let par of pars) {
                 let textPar = await this.page.evaluate(element => element.textContent, par);
-                const hasExcludedText = this.excludedParagraphs.some((text) => textPar == text)
+                const hasExcludedText = this.excludedParagraphs.some((text) => textPar.includes(text))
                 if (!hasExcludedText) {
                     textPar = textPar.trim()
                     if (textPar !== ""){
@@ -113,14 +113,14 @@ export class PublicoContentScraper extends ContentScraper {
 
     async extractBodyMarkdown(div: any) {
         try {
-            const pars = await this.page.$$("p.pb-article-item-iteration, h3.highlighted, h2.highlighted")
+            const pars = await this.page.$$("p, h3, h2")
             let text = ''
             for (let par of pars) {
                 let tagName = await (await par.getProperty('tagName')).jsonValue()
                 tagName = tagName.toLocaleLowerCase()
                 
                 let inner_html = await this.page.evaluate(element => element.innerHTML, par);
-                const hasExcludedText = this.excludedParagraphs.some((text) => inner_html == text)
+                const hasExcludedText = this.excludedParagraphs.some((text) => inner_html.includes(text))
                 if (!hasExcludedText) {
                     let markdownText = NodeHtmlMarkdown.translate(inner_html).trim()
                     
@@ -188,7 +188,7 @@ export class PublicoContentScraper extends ContentScraper {
             //date = date.split("/")[4].split("#")[0]            
             //date = new Date(date)
 
-            let date = await this.page.$eval("header>time", (element: any) => element.getAttribute('datetime'));
+            let date = await this.page.$eval("head > meta[property='article:published_time']", (element: any) => element.content);
             date = new Date(date)
 
             return date
