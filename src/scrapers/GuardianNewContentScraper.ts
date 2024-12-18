@@ -24,12 +24,13 @@ export class GuardianNewContentScraper extends ContentScraper {
             await this.initializePuppeteer();
         } catch (e) {
             console.log("error initializing")
+            return {url: url, status: "error", "log":""+e.message} as NewScrapedI
         }
         try {
             try {
                 await this.page.goto(url, {waitUntil: 'load', timeout: 0});
             } catch (e) {
-                return {} as NewScrapedI
+                return {url: url, status: "error", "log":""+e.message} as NewScrapedI
             }
 
             const div = await this.page.$('article');
@@ -52,7 +53,8 @@ export class GuardianNewContentScraper extends ContentScraper {
                 newspaper: this.newspaper,
                 newsIndex: newsIndex,
                 scrapedAt: new Date(),
-                scrapingIteration: scrapingIteration
+                scrapingIteration: scrapingIteration,
+                status:"ok"
             } as NewScrapedI
             return results;
 
@@ -60,7 +62,7 @@ export class GuardianNewContentScraper extends ContentScraper {
             console.log(err);
             await this.page.screenshot({path: 'error_extract_new.png'});
             await this.browser.close();
-            return null;
+            return {url: url, status: "error", "log":""+err.message} as NewScrapedI
         }
     }
 

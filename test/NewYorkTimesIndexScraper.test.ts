@@ -27,6 +27,7 @@ describe('NewYorkTimesIndexScraper 1', function () {
      
 
             expect(result).not.equal(undefined)
+            expect(result).to.have.lengthOf.at.least(1)
             expect(scraper.scrapingIndex.pageNewIndex).to.equal(2)
             console.log(result);
             

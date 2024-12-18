@@ -19,5 +19,7 @@ export interface NewScrapedI {
     scraperId: string
     scrapingIteration: number
     id: string
+    status: string
+    log:string
     newsIndex: number
 }

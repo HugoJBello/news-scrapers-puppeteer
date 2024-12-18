@@ -69,7 +69,7 @@ export default class ScraperApp {
                 console.log("ERROR")
                 console.log(e)
                 console.log("----------------------------------")
-                this.globalConfig.lastLog = this.globalConfig.lastLog + "\n ERROR: " + e
+                this.globalConfig.lastLog = this.globalConfig.lastLog + "\n"+ (new Date()).toISOString() + " -- " + " ERROR: " + e
                 await this.persistenceManager.updateGlobalConfig(this.globalConfig)
 
                 await this.setUpNextIteration(scraperTuple)
@@ -272,7 +272,7 @@ export default class ScraperApp {
                 console.log("Waiting ", waitMinutes, " minutes")
                 console.log("----------------------------------")
 
-                this.globalConfig.lastLog = this.globalConfig.lastLog + "\n Waiting for " + waitMinutes + " minutes "
+                this.globalConfig.lastLog = this.globalConfig.lastLog + "\n" + (new Date()).toISOString() + " -- " +" Waiting for " + waitMinutes + " minutes "
                 await this.persistenceManager.updateGlobalConfig(this.globalConfig)
                 
                 await this.wait(waitMinutes * 60 * 1000)
@@ -281,7 +281,7 @@ export default class ScraperApp {
                     this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
                     await this.persistenceManager.updateGlobalConfig(this.globalConfig)
 
-                    this.globalConfig.lastLog = this.globalConfig.lastLog + "\n Closing after waiting " + waitMinutes + " minutes "
+                    this.globalConfig.lastLog = this.globalConfig.lastLog + "\n"+ (new Date()).toISOString() + " -- " + " Closing after waiting " + waitMinutes + " minutes "
                     await this.persistenceManager.updateGlobalConfig(this.globalConfig)
 
                     process.exit(1);
@@ -338,6 +338,10 @@ export default class ScraperApp {
                 extractedNews.id = UtilsManager.createIdFromUrl(url)
                 
                 console.log(extractedNews)
+                if (extractedNews.status == "error"){
+                    this.globalConfig.lastLog = this.globalConfig.lastLog + "\n"+ (new Date()).toISOString() + " -- error: " +  extractedNews.log
+                    await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
+                }
                 
                 await this.persistenceManager.saveNewsScraped(extractedNews)
             }
@@ -346,7 +350,7 @@ export default class ScraperApp {
             scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex = scraperTuple.urlSectionExtractorScraper.scrapingIndex.pageNewIndex + 1
             
             await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
-            this.globalConfig.lastLog = this.globalConfig.lastLog + "\n " +  message
+            this.globalConfig.lastLog = this.globalConfig.lastLog + "\n"+ (new Date()).toISOString() + " -- " +  message
             await this.refreshGlobalConfigFromIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
         }
 
@@ -367,7 +371,7 @@ export default class ScraperApp {
         }
         scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration = scraperTuple.urlSectionExtractorScraper.scrapingIndex.scrapingIteration + 1
         this.globalConfig.globalIteration = this.globalConfig.globalIteration + 1
-        this.globalConfig.lastLog = this.globalConfig.lastLog + "\n completed " + scraperTuple.pageScraper.newspaper
+        this.globalConfig.lastLog = this.globalConfig.lastLog + "\n"+ (new Date()).toISOString() + " -- " +"completed " + scraperTuple.pageScraper.newspaper
         await this.persistenceManager.updateGlobalConfig(this.globalConfig)
         await this.persistenceManager.updateIndex(scraperTuple.urlSectionExtractorScraper.scrapingIndex)
     }

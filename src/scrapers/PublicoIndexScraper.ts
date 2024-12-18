@@ -87,7 +87,7 @@ export class PublicoIndexScraper extends IndexScraper {
     }
 
     async extractUrlsFromPage(): Promise<string[]>{
-        let hrefs = await this.page.$$('div.title>a')
+        let hrefs = await this.page.$$('div>h2>a')
         const urls = []
         for (const hrefv of hrefs){
             let url = await this.page.evaluate((a:any) => a.href, hrefv);

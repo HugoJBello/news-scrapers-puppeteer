@@ -26,6 +26,7 @@ describe('GuardianIndexScraper 1', function () {
             console.log(scraper.scrapingIndex);
             expect(result).not.to.equal(undefined)
             expect(result.length).not.to.equal(0)
+            expect(result).to.have.lengthOf.at.least(1)
             expect(scraper.scrapingIndex.pageNewIndex).to.equal(2)
         });
     });

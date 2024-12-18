@@ -20,6 +20,8 @@ export interface NewScrapedSqlI {
     scraperId: string
     scrapingIteration: number
     id: string
+    status: string
+    log:string
     newsIndex: number
 }
 
@@ -74,6 +76,12 @@ export const newScrapedSqlAttributes = {
         type: DataTypes.STRING,
     },
     scraperId: {
+        type: DataTypes.STRING,
+    },
+    status: {
+        type: DataTypes.STRING,
+    },
+    log: {
         type: DataTypes.STRING,
     },
     newsIndex: {

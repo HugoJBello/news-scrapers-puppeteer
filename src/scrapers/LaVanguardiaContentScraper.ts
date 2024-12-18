@@ -31,7 +31,7 @@ export class LaVanguardiaContentScraper extends ContentScraper {
 
         if (!this.checkCorrectUrl(url)){
             console.log("INCORRECT url ", url);
-            return {} as NewScrapedI
+            return {url: url, status: "error", "log":"url"} as NewScrapedI
         }
 
 
@@ -41,6 +41,7 @@ export class LaVanguardiaContentScraper extends ContentScraper {
             await this.initializePuppeteer();
         } catch (e) {
             console.log("error initializing")
+            return {url: url, status: "error", "log":""+e.message} as NewScrapedI
         }
         try {
             try {
@@ -72,7 +73,8 @@ export class LaVanguardiaContentScraper extends ContentScraper {
                 newspaper: this.newspaper,
                 newsIndex: newsIndex,
                 scrapedAt: new Date(),
-                scrapingIteration: scrapingIteration
+                scrapingIteration: scrapingIteration,
+                status:"ok"
             } as NewScrapedI
             return results;
 
@@ -80,7 +82,7 @@ export class LaVanguardiaContentScraper extends ContentScraper {
             console.log(err);
             await this.page.screenshot({path: 'error_extract_new.png'});
             await this.browser.close();
-            return null;
+            return {url: url, status: "error", "log":""+err.message} as NewScrapedI
         }
     }
 
