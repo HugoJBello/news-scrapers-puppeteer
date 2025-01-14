@@ -1,6 +1,8 @@
 import {ScrapingIndexI} from "../src/models/ScrapingIndex";
 import {ElPaisContentScraper} from "../src/scrapers/ElPaisContentScraper";
 import { expect } from 'chai';
+import fs from 'fs';
+
 
 require('dotenv').config();
 
@@ -15,7 +17,7 @@ describe('ElPaisContentScraper 1', function () {
 
         it('ElPaisContentScraper', async function () {
 
-            const url = "https://elpais.com/tecnologia/2023-01-24/el-via-crucis-de-hacer-tramites-digitales-con-la-administracion-cada-procedimiento-es-un-mundo-con-su-propia-normativa.html"
+            const url = "https://elpais.com/economia/2024-09-04/el-banco-de-espana-calcula-que-las-renovables-reduciran-el-precio-de-la-luz-a-la-mitad-en-2030.html"
             const result = await scraper.extractNewInUrl(url, "", 0, 0);
             console.log(result);
             expect(result).to.have.property("content")
@@ -42,6 +44,8 @@ describe('ElPaisContentScraper 1', function () {
             expect(result.description).not.equal(undefined)
             expect(result.headline).not.equal(undefined)
             expect(result.url).not.equal(undefined)
+
+            //await fs.writeFileSync("new.md", result.contentMarkdown)
         });
     });
 });

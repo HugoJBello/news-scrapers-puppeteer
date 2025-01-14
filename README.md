@@ -16,6 +16,7 @@ run single test using it(..) handle:
     npm test -- --grep "GuardianNewContentScraper"
     npm test -- --grep "ElDiarioesContentScraper"
     npm test -- --grep "PublicoContentScraper"
+    npm test -- --grep "ElPaisContentScraper"
     npm test -- --grep "ElMundoContentScraper"
     npm test -- --grep "ElHeraldoSoriaContentScraper"
     npm test -- --grep "ScienceNewsContentScraper"
